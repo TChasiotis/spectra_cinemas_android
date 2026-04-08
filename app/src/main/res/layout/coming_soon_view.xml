@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingTop="20dp"
+            android:paddingTop="40dp"
             android:paddingBottom="20dp"
             android:paddingStart="40dp"
             android:paddingEnd="40dp">
@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ταινίες"
+                android:text="Προσεχώς"
                 android:textColor="#FFFFFF"
                 android:textSize="32sp"
                 android:textStyle="bold"
@@ -39,7 +39,7 @@
                 android:layout_marginBottom="20dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/moviesRecyclerView"
+                android:id="@+id/comingSoonRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
