@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/l_spectra_background">
+
+    <FrameLayout
+        android:id="@+id/bottomActionBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="20dp"
+        android:background="#1A1A1A">
+
+        <Button
+            android:id="@+id/btnFinish"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:backgroundTint="#00FF00"
+            android:text="ΟΛΟΚΛΗΡΩΣΗ"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:id="@+id/loadingBox"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#B3000000"
+            android:visibility="gone">
+            <ProgressBar android:layout_width="30dp" android:layout_height="30dp" android:layout_gravity="center" android:indeterminateTint="#00FF00"/>
+        </FrameLayout>
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomActionBox"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΠΛΗΡΩΜΗ" android:textColor="#FFFFFF" android:textSize="32sp" android:textStyle="bold" android:layout_marginBottom="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#1A1A1A"
+                android:padding="20dp"
+                android:layout_marginBottom="30dp"
+                android:elevation="4dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΤΑΙΝΙΑ" android:textColor="#AAAAAA" android:textSize="12sp"/>
+                <TextView android:id="@+id/lblSummaryMovie" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Movie Title" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="10dp"/>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#4DFFFFFF" android:layout_marginBottom="15dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="15dp">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΤΟΠΟΘΕΣΙΑ" android:textColor="#AAAAAA" android:textSize="12sp"/>
+                        <TextView android:id="@+id/lblSummaryCinema" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Spectra" android:textColor="#FFFFFF" android:textStyle="bold"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΑΙΘΟΥΣΑ" android:textColor="#AAAAAA" android:textSize="12sp"/>
+                        <TextView android:id="@+id/lblSummaryHall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hall Name" android:textColor="#FFFFFF" android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="15dp">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΠΟΤΕ" android:textColor="#AAAAAA" android:textSize="12sp"/>
+                        <TextView android:id="@+id/lblSummaryDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Date - Time" android:textColor="#FFFFFF" android:textStyle="bold"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΘΕΣΕΙΣ" android:textColor="#AAAAAA" android:textSize="12sp"/>
+                        <TextView android:id="@+id/lblSummarySeats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textColor="#FFFFFF" android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#4DFFFFFF" android:layout_marginBottom="15dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ΣΥΝΟΛΟ:" android:textColor="#AAAAAA" android:textSize="18sp"/>
+                    <TextView android:id="@+id/lblSummaryTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0.00€" android:textColor="#00FF00" android:textSize="26sp" android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΤΡΟΠΟΣ ΠΛΗΡΩΜΗΣ" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" android:layout_marginBottom="15dp"/>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="50dp" android:orientation="horizontal" android:layout_marginBottom="25dp">
+                <Button android:id="@+id/btnToggleCard" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#00FF00" android:text="💳 ΚΑΡΤΑ" android:textColor="#000000" android:textStyle="bold" android:layout_marginEnd="5dp"/>
+                <Button android:id="@+id/btnToggleCash" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#333333" android:text="💵 ΤΑΜΕΙΟ" android:textColor="#FFFFFF" android:textStyle="bold" android:layout_marginStart="5dp"/>
+            </LinearLayout>
+
+            <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                <LinearLayout android:id="@+id/boxCardForm" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Όνομα Κατόχου" android:textColor="#AAAAAA" android:layout_marginBottom="5dp"/>
+                    <EditText android:id="@+id/txtHolder" android:layout_width="match_parent" android:layout_height="50dp" android:background="#333333" android:textColor="#FFFFFF" android:hint="ONOMA EPONYMO" android:textColorHint="#777777" android:padding="10dp" android:layout_marginBottom="20dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Αριθμός Κάρτας" android:textColor="#AAAAAA" android:layout_marginBottom="5dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="50dp" android:orientation="horizontal" android:background="#333333" android:padding="5dp" android:layout_marginBottom="20dp" android:gravity="center_vertical">
+                        <EditText android:id="@+id/txtCardNumber" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@null" android:textColor="#FFFFFF" android:hint="0000 0000 0000 0000" android:textColorHint="#777777" android:inputType="number" android:paddingStart="10dp"/>
+                        <ImageView android:id="@+id/imgCardLogo" android:layout_width="40dp" android:layout_height="25dp" android:src="@android:drawable/ic_menu_crop"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="15dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Λήξη" android:textColor="#AAAAAA" android:layout_marginBottom="5dp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="50dp" android:orientation="horizontal">
+                                <EditText android:id="@+id/txtMonth" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#333333" android:textColor="#FFFFFF" android:hint="MM" android:textColorHint="#777777" android:gravity="center" android:inputType="number"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="/" android:textColor="#AAAAAA" android:textSize="20sp" android:layout_margin="5dp"/>
+                                <EditText android:id="@+id/txtYear" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#333333" android:textColor="#FFFFFF" android:hint="YY" android:textColorHint="#777777" android:gravity="center" android:inputType="number"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="100dp" android:layout_height="wrap_content" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CVV" android:textColor="#AAAAAA" android:layout_marginBottom="5dp"/>
+                            <EditText android:id="@+id/txtCVV" android:layout_width="match_parent" android:layout_height="50dp" android:background="#333333" android:textColor="#FFFFFF" android:hint="123" android:textColorHint="#777777" android:gravity="center" android:inputType="numberPassword"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/boxCashMessage" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" android:gravity="center" android:padding="20dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Πληρωμή στο Ταμείο" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="15dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Η κράτησή σας θα δεσμευτεί κανονικά.\nΠαρακαλούμε προσέλθετε στο ταμείο τουλάχιστον 20 λεπτά πριν την έναρξη της προβολής." android:textColor="#AAAAAA" android:textSize="16sp" android:textAlignment="center" android:lineSpacingExtra="4dp"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView android:id="@+id/lblError" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#FF4444" android:layout_marginTop="15dp" android:visibility="gone"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
