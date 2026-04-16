@@ -4,8 +4,9 @@ data class Movie(
     val title: String,
     val englishTitle: String,
     val description: String,
-    val imageResId: Int,   // Για το Poster (π.χ. R.drawable.m_avatar_poster)
-    val trailerResId: Int, // Για την εικόνα του Trailer
+    val imageResId: Int,
+    val trailerResId: Int,
     val tags: String,
-    val showtimes: List<String>
+    val showtimes: List<String>? = null, // Το κάναμε προαιρετικό (?)
+    val releaseDate: String? = null      // Προσθέσαμε την ημερομηνία (προαιρετική)
 )
