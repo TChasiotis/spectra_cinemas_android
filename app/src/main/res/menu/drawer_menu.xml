@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_movies"
+            android:icon="@android:drawable/ic_menu_slideshow"
+            android:title="Ταινίες" />
+        <item
+            android:id="@+id/nav_cinemas"
+            android:icon="@android:drawable/ic_menu_mapmode"
+            android:title="Κινηματογράφοι" />
+        <item
+            android:id="@+id/nav_halls"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Αίθουσες" />
+        <item
+            android:id="@+id/nav_coming_soon"
+            android:icon="@android:drawable/ic_menu_day"
+            android:title="Προσεχώς" />
+        <item
+            android:id="@+id/nav_canteen"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Κυλικείο" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@android:drawable/ic_menu_call"
+            android:title="Επικοινωνία" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="Ιστορικό" />
+    </group>
+</menu>
