@@ -5,21 +5,25 @@
     android:layout_height="match_parent"
     android:background="@drawable/l_spectra_background">
 
-    <!-- Ημι-διαφανές overlay -->
+    <!-- Το Overlay μπαίνει ως φόντο σε ένα FrameLayout που περιέχει το ScrollView -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99000000" />
 
     <ScrollView
+        android:id="@+id/registerScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:isScrollContainer="true"
+        android:scrollbarWithThumb="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="24dp">
+            android:padding="24dp"
+            android:paddingBottom="100dp"> <!-- Επιπλέον padding στο τέλος για να "ανέβει" η κάρτα -->
 
             <TextView
                 android:id="@+id/tvRegisterTitle"
@@ -236,7 +240,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number"
-                                android:maxLength="16"
+                                android:maxLength="19"
                                 android:textColor="@color/white" />
                         </com.google.android.material.textfield.TextInputLayout>
 

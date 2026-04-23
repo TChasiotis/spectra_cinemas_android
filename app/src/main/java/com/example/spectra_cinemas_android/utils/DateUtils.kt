@@ -38,4 +38,23 @@ object DateUtils {
 
         return age >= 18
     }
+
+    /**
+     * Ελέγχει αν μια κάρτα έχει λήξει με βάση τον μήνα και το έτος (MM/YY)
+     */
+    fun isCardExpired(month: Int, yearYY: Int): Boolean {
+        val today = getCurrentDate()
+        val currentYear = today.get(Calendar.YEAR)
+        val currentMonth = today.get(Calendar.MONTH) + 1 // Calendar months are 0-11
+
+        val fullYear = 2000 + yearYY
+        
+        return if (fullYear < currentYear) {
+            true
+        } else if (fullYear == currentYear) {
+            month < currentMonth
+        } else {
+            false
+        }
+    }
 }

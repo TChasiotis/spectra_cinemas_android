@@ -58,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Ονοματεπώνυμο: Γιώργος Παπαδόπουλος"
+                        android:text="Ονοματεπώνυμο: -"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Email: george@example.com"
+                        android:text="Email: -"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -116,7 +116,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@id/ivCardIcon"
-                            android:text="**** **** **** 4567"
+                            android:text="**** **** **** ****"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
@@ -152,6 +152,16 @@
                 android:text="ΑΠΟΣΥΝΔΕΣΗ"
                 android:textColor="@color/white"
                 app:cornerRadius="8dp" />
+
+            <Button
+                android:id="@+id/btnDeleteAccount"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@android:color/transparent"
+                android:text="ΔΙΑΓΡΑΦΗ ΛΟΓΑΡΙΑΣΜΟΥ"
+                android:textColor="@color/red_primary"
+                android:textSize="12sp" />
 
         </LinearLayout>
     </ScrollView>
