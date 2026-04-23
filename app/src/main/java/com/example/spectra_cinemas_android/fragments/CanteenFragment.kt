@@ -61,22 +61,27 @@ class CanteenFragment : Fragment() {
     }
 
     private fun updateButtonStyles(isSnacks: Boolean) {
+        val activeColor = ContextCompat.getColor(requireContext(), R.color.red_primary)
+        val inactiveColor = Color.TRANSPARENT
+        val activeTextColor = Color.WHITE
+        val inactiveTextColor = Color.WHITE
+
         if (isSnacks) {
             binding.btnSnacks.setBackgroundResource(R.drawable.f_btn_active_background)
-            binding.btnSnacks.setBackgroundColor(Color.parseColor("#00FF00"))
-            binding.btnSnacks.setTextColor(Color.BLACK)
+            binding.btnSnacks.backgroundTintList = android.content.res.ColorStateList.valueOf(activeColor)
+            binding.btnSnacks.setTextColor(activeTextColor)
 
             binding.btnDrinks.setBackgroundResource(0)
-            binding.btnDrinks.setBackgroundColor(Color.TRANSPARENT)
-            binding.btnDrinks.setTextColor(Color.WHITE)
+            binding.btnDrinks.setBackgroundColor(inactiveColor)
+            binding.btnDrinks.setTextColor(inactiveTextColor)
         } else {
             binding.btnDrinks.setBackgroundResource(R.drawable.f_btn_active_background)
-            binding.btnDrinks.setBackgroundColor(Color.parseColor("#00FF00"))
-            binding.btnDrinks.setTextColor(Color.BLACK)
+            binding.btnDrinks.backgroundTintList = android.content.res.ColorStateList.valueOf(activeColor)
+            binding.btnDrinks.setTextColor(activeTextColor)
 
             binding.btnSnacks.setBackgroundResource(0)
-            binding.btnSnacks.setBackgroundColor(Color.TRANSPARENT)
-            binding.btnSnacks.setTextColor(Color.WHITE)
+            binding.btnSnacks.setBackgroundColor(inactiveColor)
+            binding.btnSnacks.setTextColor(inactiveTextColor)
         }
     }
 

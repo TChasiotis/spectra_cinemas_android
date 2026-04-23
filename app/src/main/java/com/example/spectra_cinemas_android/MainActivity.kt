@@ -1,21 +1,20 @@
 package com.example.spectra_cinemas_android
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.spectra_cinemas_android.databinding.ActivityMainBinding
-import com.example.spectra_cinemas_android.fragments.MoviesFragment
-import com.example.spectra_cinemas_android.fragments.ComingSoonFragment
-import com.example.spectra_cinemas_android.fragments.CinemasFragment
-import com.example.spectra_cinemas_android.fragments.CanteenFragment
+import com.example.spectra_cinemas_android.fragments.*
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
+    private var isLoggedIn = false // Προσωρινή μεταβλητή μέχρι να μπει το Firebase Auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +32,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.navView.setNavigationItemSelectedListener(this)
 
+        updateMenuVisibility()
+
         if (savedInstanceState == null) {
             replaceFragment(MoviesFragment(), "Ταινίες")
             binding.navView.setCheckedItem(R.id.nav_movies)
         }
+    }
+
+    private fun updateMenuVisibility() {
+        val menu = binding.navView.menu
+        
+        // Όταν ΔΕΝ είναι συνδεδεμένος
+        menu.findItem(R.id.nav_login).isVisible = !isLoggedIn
+        menu.findItem(R.id.nav_register).isVisible = !isLoggedIn
+        
+        // Όταν ΕΙΝΑΙ συνδεδεμένος
+        menu.findItem(R.id.nav_profile).isVisible = isLoggedIn
+        menu.findItem(R.id.nav_logout).isVisible = isLoggedIn
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -45,9 +58,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_coming_soon -> replaceFragment(ComingSoonFragment(), "Προσεχώς")
             R.id.nav_cinemas -> replaceFragment(CinemasFragment(), "Κινηματογράφοι")
             R.id.nav_canteen -> replaceFragment(CanteenFragment(), "Κυλικείο")
+            R.id.nav_halls -> replaceFragment(HallsFragment(), "Αίθουσες")
+            R.id.nav_contact -> replaceFragment(ContactFragment(), "Επικοινωνία")
+            R.id.nav_history -> replaceFragment(HistoryFragment(), "Ιστορικό")
+            
+            R.id.nav_login -> replaceFragment(LoginFragment(), "Σύνδεση")
+            R.id.nav_register -> replaceFragment(RegisterFragment(), "Εγγραφή")
+            
+            R.id.nav_logout -> {
+                isLoggedIn = false
+                updateMenuVisibility()
+                replaceFragment(MoviesFragment(), "Ταινίες")
+            }
+            R.id.nav_profile -> {
+                replaceFragment(ProfileFragment(), "Προφίλ")
+            }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    // Προσθήκη μεθόδου για να αλλάζουμε το login status από τα Fragments
+    fun setLoggedIn(status: Boolean) {
+        isLoggedIn = status
+        updateMenuVisibility()
     }
 
     fun replaceFragment(fragment: Fragment, title: String) {

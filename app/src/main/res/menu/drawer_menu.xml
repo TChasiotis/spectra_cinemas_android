@@ -30,4 +30,25 @@
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="Ιστορικό" />
     </group>
+
+    <item android:title="Λογαριασμός">
+        <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@android:drawable/ic_menu_set_as"
+                android:title="Σύνδεση" />
+            <item
+                android:id="@+id/nav_register"
+                android:icon="@android:drawable/ic_menu_add"
+                android:title="Εγγραφή" />
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="Προφίλ" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Αποσύνδεση" />
+        </menu>
+    </item>
 </menu>
