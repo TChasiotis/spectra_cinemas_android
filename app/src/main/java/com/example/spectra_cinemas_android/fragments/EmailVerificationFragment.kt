@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.spectra_cinemas_android.MainActivity
+import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.EmailVerificationViewBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -55,19 +56,28 @@ class EmailVerificationFragment : Fragment() {
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 if (user != null && user.isEmailVerified) {
-                    Toast.makeText(requireContext(), "Η επαλήθευση ολοκληρώθηκε! Τώρα μπορείτε να συνδεθείτε.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Η επαλήθευση ολοκληρώθηκε!", Toast.LENGTH_SHORT).show()
                     
-                    // Αποσύνδεση και μετάβαση στο Login όπως ζητήθηκε
-                    auth.signOut()
-                    (activity as? MainActivity)?.let { mainActivity ->
-                        mainActivity.setLoggedIn(false)
-                        mainActivity.replaceFragment(LoginFragment(), "Σύνδεση")
+                    val mainActivity = (activity as? MainActivity)
+                    mainActivity?.setLoggedIn(true)
+                    
+                    // ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΚΡΑΤΗΣΗ
+                    if (mainActivity?.pendingMovie != null) {
+                        mainActivity.replaceFragment(
+                            SeatSelectionFragment.newInstance(
+                                mainActivity.pendingMovie!!,
+                                mainActivity.pendingCinema,
+                                mainActivity.pendingDate,
+                                mainActivity.pendingTime
+                            ),
+                            "Επιλογή Θέσεων"
+                        )
+                    } else {
+                        mainActivity?.replaceFragment(MoviesFragment(), "Ταινίες")
                     }
                 } else {
                     Toast.makeText(requireContext(), "Το email δεν έχει επαληθευτεί ακόμα.", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(requireContext(), "Σφάλμα: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

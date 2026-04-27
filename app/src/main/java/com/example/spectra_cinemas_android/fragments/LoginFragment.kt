@@ -59,20 +59,30 @@ class LoginFragment : Fragment() {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     if (user != null && user.isEmailVerified) {
-                        // Επιτυχής είσοδος και το email είναι επαληθευμένο
-                        Toast.makeText(requireContext(), "Καλώς ήρθατε!", Toast.LENGTH_SHORT).show()
-                        (activity as? MainActivity)?.let { mainActivity ->
-                            mainActivity.setLoggedIn(true)
-                            mainActivity.replaceFragment(MoviesFragment(), "Ταινίες")
+                        // Επιτυχής είσοδος
+                        val mainActivity = (activity as? MainActivity)
+                        mainActivity?.setLoggedIn(true)
+                        
+                        // Δυναμική πλοήγηση: Αν υπάρχει εκκρεμής κράτηση, πήγαινε εκεί
+                        if (mainActivity?.pendingMovie != null) {
+                            mainActivity.replaceFragment(
+                                SeatSelectionFragment.newInstance(
+                                    mainActivity.pendingMovie!!,
+                                    mainActivity.pendingCinema,
+                                    mainActivity.pendingDate,
+                                    mainActivity.pendingTime
+                                ),
+                                "Επιλογή Θέσεων"
+                            )
+                        } else {
+                            mainActivity?.replaceFragment(MoviesFragment(), "Ταινίες")
                         }
                     } else {
-                        // Το email δεν έχει επαληθευτεί
                         auth.signOut()
-                        Toast.makeText(requireContext(), "Παρακαλώ επαληθεύστε το email σας πριν συνδεθείτε.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Παρακαλώ επαληθεύστε το email σας.", Toast.LENGTH_LONG).show()
                         binding.btnLogin.isEnabled = true
                     }
                 } else {
-                    // Αποτυχία εισόδου
                     Toast.makeText(requireContext(), "Σφάλμα σύνδεσης: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     binding.btnLogin.isEnabled = true
                 }
@@ -82,18 +92,15 @@ class LoginFragment : Fragment() {
     private fun resetPassword() {
         val email = binding.etEmail.text.toString().trim()
         if (email.isEmpty()) {
-            Toast.makeText(requireContext(), "Εισάγετε το email σας για επαναφορά κωδικού", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Εισάγετε το email σας", Toast.LENGTH_SHORT).show()
             return
         }
 
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(requireContext(), "Ο σύνδεσμος επαναφοράς στάλθηκε στο email σας", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(requireContext(), "Σφάλμα: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
+        auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(requireContext(), "Ο σύνδεσμος επαναφοράς στάλθηκε", Toast.LENGTH_LONG).show()
             }
+        }
     }
 
     override fun onDestroyView() {

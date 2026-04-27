@@ -1,16 +1,19 @@
 package com.example.spectra_cinemas_android.fragments
 
-import android.net.Uri
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.VideoView
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.ComingSoonDetailsViewBinding
 import com.example.spectra_cinemas_android.models.Movie
 import com.example.spectra_cinemas_android.utils.ComingSoonData
+import com.example.spectra_cinemas_android.utils.VideoPlayer
 
 class ComingSoonDetailsFragment : Fragment() {
 
@@ -49,20 +52,45 @@ class ComingSoonDetailsFragment : Fragment() {
         binding.titleLabel.text = movie.title
         binding.subtitleLabel.text = movie.englishTitle
         binding.descriptionText.text = movie.description
-        binding.releaseDateLabel.text = movie.releaseDate
+        binding.releaseDateLabel.text = "Αναμένεται: ${movie.releaseDate}"
 
         val tags = movie.tags.split("|")
-        if (tags.size > 0) binding.ratingLabel.text = tags[0].trim()
+        if (tags.isNotEmpty()) binding.ratingLabel.text = tags[0].trim()
         if (tags.size > 1) binding.genreLabel.text = tags[1].trim()
         if (tags.size > 2) binding.durationLabel.text = tags[2].trim()
 
-        binding.btnPoster.setOnClickListener { showPoster() }
-        binding.btnTrailer.setOnClickListener { showTrailer() }
-
+        updateToggleStyles(true)
         showPoster()
+
+        binding.btnPoster.setOnClickListener { 
+            updateToggleStyles(true)
+            showPoster() 
+        }
+        binding.btnTrailer.setOnClickListener { 
+            updateToggleStyles(false)
+            showTrailer() 
+        }
+    }
+
+    private fun updateToggleStyles(isPoster: Boolean) {
+        val activeColor = ContextCompat.getColor(requireContext(), R.color.red_primary)
+        val inactiveColor = Color.parseColor("#333333")
+
+        if (isPoster) {
+            binding.btnPoster.backgroundTintList = ColorStateList.valueOf(activeColor)
+            binding.btnPoster.setTextColor(Color.WHITE)
+            binding.btnTrailer.backgroundTintList = ColorStateList.valueOf(inactiveColor)
+            binding.btnTrailer.setTextColor(Color.GRAY)
+        } else {
+            binding.btnTrailer.backgroundTintList = ColorStateList.valueOf(activeColor)
+            binding.btnTrailer.setTextColor(Color.WHITE)
+            binding.btnPoster.backgroundTintList = ColorStateList.valueOf(inactiveColor)
+            binding.btnPoster.setTextColor(Color.GRAY)
+        }
     }
 
     private fun showPoster() {
+        VideoPlayer.stop()
         binding.mediaContainer.removeAllViews()
         val imageView = ImageView(requireContext())
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
@@ -71,19 +99,13 @@ class ComingSoonDetailsFragment : Fragment() {
     }
 
     private fun showTrailer() {
-        binding.mediaContainer.removeAllViews()
-        val videoView = VideoView(requireContext())
-        val uri = Uri.parse("android.resource://" + requireContext().packageName + "/" + (currentMovie?.trailerResId ?: 0))
-        videoView.setVideoURI(uri)
-        binding.mediaContainer.addView(videoView)
-        videoView.setOnPreparedListener { mp ->
-            mp.isLooping = true
-            videoView.start()
-        }
+        val movie = currentMovie ?: return
+        VideoPlayer.attachPlayer(requireContext(), binding.mediaContainer, movie.trailerResId, layoutInflater)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        VideoPlayer.stop()
         _binding = null
     }
 }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.adapters.MoviesAdapter
 import com.example.spectra_cinemas_android.databinding.MoviesViewBinding
 import com.example.spectra_cinemas_android.utils.MovieData
@@ -28,7 +29,11 @@ class MoviesFragment : Fragment() {
 
         val movies = MovieData.getMovies()
         val adapter = MoviesAdapter(movies) { movie ->
-            // Λογική για κλικ σε ταινία (π.χ. άνοιγμα λεπτομερειών)
+            // Άνοιγμα λεπτομερειών ταινίας
+            (activity as? MainActivity)?.replaceFragment(
+                MovieDetailsFragment.newInstance(movie.title),
+                movie.title
+            )
         }
 
         binding.moviesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)

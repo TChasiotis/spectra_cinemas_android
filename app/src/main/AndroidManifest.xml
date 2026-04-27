@@ -23,12 +23,11 @@
         </activity>
 
         <activity
-            android:name=".ComingSoonActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".ComingSoonDetailsActivity"
-            android:exported="false" />
+            android:name=".activities.FullscreenVideoActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
 

@@ -1,7 +1,34 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Spectra_cinemas_android" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/red_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/red_dark</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/red_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Tertiary & Surface - FORCE NO LILAC -->
+        <item name="colorTertiary">@color/red_dark</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorSurface">@color/background_black</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorSurfaceVariant">#1A1A1A</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+
+        <!-- Fix for Navigation Drawer & Toolbar background -->
+        <item name="colorContainer">@color/background_black</item>
+        <item name="colorOnContainer">@color/white</item>
+
+        <!-- Status bar and background -->
+        <item name="android:windowBackground">@color/background_black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="isLightTheme">false</item>
     </style>
 </resources>
