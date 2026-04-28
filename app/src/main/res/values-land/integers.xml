@@ -3,4 +3,5 @@
     <integer name="grid_columns">3</integer>
     <integer name="cinema_columns">2</integer>
     <integer name="hall_columns">2</integer>
+    <integer name="contact_columns">2</integer>
 </resources>

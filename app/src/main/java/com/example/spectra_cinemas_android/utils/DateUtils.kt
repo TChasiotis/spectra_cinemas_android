@@ -25,7 +25,7 @@ object DateUtils {
         return (1..31).map { it.toString().padStart(2, '0') }
     }
 
-    fun isAdult(day: Int, month: Int, year: Int): Boolean {
+    fun getAge(day: Int, month: Int, year: Int): Int {
         val today = getCurrentDate()
         val birthDate = Calendar.getInstance()
         birthDate.set(year, month - 1, day)
@@ -35,8 +35,15 @@ object DateUtils {
         if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
             age--
         }
+        return age
+    }
 
-        return age >= 18
+    fun isAdult(day: Int, month: Int, year: Int): Boolean {
+        return getAge(day, month, year) >= 15
+    }
+    
+    fun canUseCard(day: Int, month: Int, year: Int): Boolean {
+        return getAge(day, month, year) >= 18
     }
 
     /**

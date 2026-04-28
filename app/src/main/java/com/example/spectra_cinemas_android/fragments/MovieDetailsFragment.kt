@@ -3,6 +3,7 @@ package com.example.spectra_cinemas_android.fragments
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -112,17 +113,11 @@ class MovieDetailsFragment : Fragment() {
         val activeColor = ContextCompat.getColor(requireContext(), R.color.red_primary)
         val inactiveColor = "#333333".toColorInt()
 
-        if (isPoster) {
-            binding.btnPoster.backgroundTintList = ColorStateList.valueOf(activeColor)
-            binding.btnPoster.setTextColor(Color.WHITE)
-            binding.btnTrailer.backgroundTintList = ColorStateList.valueOf(inactiveColor)
-            binding.btnTrailer.setTextColor(Color.GRAY)
-        } else {
-            binding.btnTrailer.backgroundTintList = ColorStateList.valueOf(activeColor)
-            binding.btnTrailer.setTextColor(Color.WHITE)
-            binding.btnPoster.backgroundTintList = ColorStateList.valueOf(inactiveColor)
-            binding.btnPoster.setTextColor(Color.GRAY)
-        }
+        binding.btnPoster.backgroundTintList = ColorStateList.valueOf(if (isPoster) activeColor else inactiveColor)
+        binding.btnPoster.setTextColor(if (isPoster) Color.WHITE else Color.GRAY)
+        
+        binding.btnTrailer.backgroundTintList = ColorStateList.valueOf(if (isPoster) inactiveColor else activeColor)
+        binding.btnTrailer.setTextColor(if (isPoster) Color.GRAY else Color.WHITE)
     }
 
     private fun refreshShowtimes() {
@@ -135,8 +130,8 @@ class MovieDetailsFragment : Fragment() {
 
         for (i in 0 until 5) {
             val dateLabelText = if (i == 0) "Σήμερα" else {
-                val formatted = sdf.format(calendar.time)
                 calendar.add(Calendar.DAY_OF_YEAR, 1)
+                val formatted = sdf.format(calendar.time)
                 formatted.replaceFirstChar { it.uppercase() }
             }
             addShowtimeRow(dateLabelText, i == 0)
@@ -147,10 +142,12 @@ class MovieDetailsFragment : Fragment() {
         val dayContainer = LinearLayout(requireContext())
         dayContainer.orientation = LinearLayout.VERTICAL
         dayContainer.setPadding(20, 20, 20, 20)
-        dayContainer.layoutParams = LinearLayout.LayoutParams(
+        val containerParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { setMargins(0, 0, 0, 30) }
+        )
+        containerParams.setMargins(0, 0, 0, 30)
+        dayContainer.layoutParams = containerParams
         
         dayContainer.setBackgroundResource(R.drawable.f_btn_active_background)
         dayContainer.backgroundTintList = ColorStateList.valueOf("#F21A1A1A".toColorInt())
@@ -158,7 +155,7 @@ class MovieDetailsFragment : Fragment() {
         val dateLabel = TextView(requireContext())
         dateLabel.text = dateText
         dateLabel.setTextColor(Color.WHITE)
-        dateLabel.textSize = 18f
+        dateLabel.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
         dateLabel.setPadding(30, 10, 30, 10)
         dateLabel.background = ContextCompat.getDrawable(requireContext(), R.drawable.f_btn_active_background)
         dateLabel.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red_primary))
@@ -174,7 +171,8 @@ class MovieDetailsFragment : Fragment() {
         val gridLayout = GridLayout(requireContext())
         gridLayout.columnCount = 4
         
-        val cinemaName = binding.cinemaSelector.selectedItem.toString()
+        val selectedItem = binding.cinemaSelector.selectedItem
+        val cinemaName = selectedItem?.toString() ?: ""
         val variant = Math.abs(currentMovie?.title?.hashCode() ?: 0) % 2
         val times = when {
             cinemaName.contains("Συγγρού") -> if (variant == 0) arrayOf("17:30", "20:00", "22:30", "00:45") else arrayOf("18:15", "20:45", "23:15", "01:00")
@@ -261,7 +259,7 @@ class MovieDetailsFragment : Fragment() {
 
     private fun handleContinue() {
         val movie = currentMovie ?: return
-        val selectedCinema = binding.cinemaSelector.selectedItem.toString()
+        val selectedCinema = binding.cinemaSelector.selectedItem?.toString() ?: ""
         
         val mainActivity = (activity as? MainActivity)
         mainActivity?.pendingMovie = movie

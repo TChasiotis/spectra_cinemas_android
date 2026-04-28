@@ -10,35 +10,26 @@
         <!-- Secondary brand color -->
         <item name="colorSecondary">@color/red_dark</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">#44E50914</item>
-        <item name="colorOnSecondaryContainer">@color/white</item>
 
-        <!-- Tertiary color - common source of lilac -->
+        <!-- Tertiary & Surface - FORCE NO LILAC -->
         <item name="colorTertiary">@color/red_dark</item>
         <item name="colorOnTertiary">@color/white</item>
-        <item name="colorTertiaryContainer">#33E50914</item>
-        <item name="colorOnTertiaryContainer">@color/white</item>
-
-        <!-- Surface and background -->
-        <item name="android:windowBackground">@color/background_black</item>
-        <item name="android:statusBarColor">@color/black</item>
-        <item name="android:navigationBarColor">@color/black</item>
-
         <item name="colorSurface">@color/background_black</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="colorSurfaceVariant">#1A1A1A</item>
         <item name="colorOnSurfaceVariant">@color/white</item>
-        <item name="colorOutline">@color/red_primary</item>
-        <item name="colorSurfaceInverse">@color/white</item>
-        <item name="colorOnSurfaceInverse">@color/background_black</item>
 
-        <!-- Fix for the lilac toolbar and components -->
+        <!-- Fix for Navigation Drawer & Toolbar background -->
+        <item name="colorContainer">@color/background_black</item>
+        <item name="colorOnContainer">@color/white</item>
+
+        <!-- Status bar and background -->
+        <item name="android:windowBackground">@color/background_black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="isLightTheme">false</item>
-
-        <!-- Selection and focus -->
-        <item name="colorControlActivated">@color/red_primary</item>
-        <item name="colorControlHighlight">#44E50914</item>
     </style>
 
     <style name="Theme.Spectra_cinemas_android" parent="Base.Theme.Spectra_cinemas_android" />

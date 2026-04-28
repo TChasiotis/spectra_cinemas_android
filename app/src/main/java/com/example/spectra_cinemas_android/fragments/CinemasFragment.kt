@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.spectra_cinemas_android.R
+import com.example.spectra_cinemas_android.adapters.CinemasAdapter
 import com.example.spectra_cinemas_android.databinding.CinemasViewBinding
-import com.example.spectra_cinemas_android.databinding.CinemaItemBinding
 import com.example.spectra_cinemas_android.utils.CinemaData
 
 class CinemasFragment : Fragment() {
@@ -25,22 +27,13 @@ class CinemasFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Γεμίζουμε το container δυναμικά, χωρίς RecyclerView
         val cinemas = CinemaData.getAllCinemas()
+        val adapter = CinemasAdapter(cinemas)
         
-        binding.cinemasContainer.removeAllViews()
-        
-        for (cinema in cinemas) {
-            val itemBinding = CinemaItemBinding.inflate(layoutInflater, binding.cinemasContainer, false)
-            
-            itemBinding.cinemaName.text = cinema.name
-            itemBinding.cinemaCity.text = "Πόλη: ${cinema.city}"
-            itemBinding.cinemaAddress.text = "📍 ${cinema.address}"
-            itemBinding.cinemaPhone.text = "📞 ${cinema.phone}"
-            itemBinding.cinemaImage.setImageResource(cinema.imageResId)
-            
-            binding.cinemasContainer.addView(itemBinding.root)
-        }
+        // Χρήση δυναμικού αριθμού στηλών (1 για portrait, 2 για landscape)
+        val columns = resources.getInteger(R.integer.cinema_columns)
+        binding.cinemasRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
+        binding.cinemasRecyclerView.adapter = adapter
     }
 
     override fun onDestroyView() {

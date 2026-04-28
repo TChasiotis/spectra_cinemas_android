@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.adapters.ContactAdapter
 import com.example.spectra_cinemas_android.databinding.ContactViewBinding
 import com.example.spectra_cinemas_android.utils.ContactData
@@ -29,7 +30,9 @@ class ContactFragment : Fragment() {
         val offices = ContactData.getOffices()
         val adapter = ContactAdapter(offices)
 
-        binding.contactRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // Χρήση δυναμικού αριθμού στηλών (1 για portrait, 2 για landscape)
+        val columns = resources.getInteger(R.integer.contact_columns)
+        binding.contactRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.contactRecyclerView.adapter = adapter
     }
 

@@ -1,6 +1,7 @@
 package com.example.spectra_cinemas_android.fragments
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +16,7 @@ import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.ProfileViewBinding
 import com.example.spectra_cinemas_android.databinding.DialogAddCardBinding
+import com.example.spectra_cinemas_android.utils.DateUtils
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -75,6 +77,7 @@ class ProfileFragment : Fragment() {
                 if (document != null && isAdded) {
                     val name = document.getString("fullName") ?: "N/A"
                     val email = document.getString("email") ?: "N/A"
+                    val age = document.getLong("age") ?: 0
                     val cardInfo = document.get("cardInfo") as? Map<*, *>
 
                     binding.tvProfileName.text = "Ονοματεπώνυμο: $name"
@@ -88,7 +91,11 @@ class ProfileFragment : Fragment() {
                         binding.btnAddCardProfile.visibility = View.GONE
                     } else {
                         binding.layoutCardInfo.visibility = View.GONE
-                        binding.btnAddCardProfile.visibility = View.VISIBLE
+                        if (age >= 18) {
+                            binding.btnAddCardProfile.visibility = View.VISIBLE
+                        } else {
+                            binding.btnAddCardProfile.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -96,26 +103,11 @@ class ProfileFragment : Fragment() {
 
     private fun showAddCardDialog() {
         val dialogBinding = DialogAddCardBinding.inflate(layoutInflater)
-        val builder = AlertDialog.Builder(requireContext(), androidx.appcompat.R.style.Theme_AppCompat_Dialog_Alert)
-        builder.setView(dialogBinding.root)
-        
-        val dialog = builder.create()
-        dialog.show()
-
-        setupCardLogic(dialogBinding)
-
-        dialogBinding.root.findViewById<View>(android.R.id.content)?.let { 
-             // This is a bit tricky with custom layout in AlertDialog. 
-             // Let's add buttons to the layout or use the builder's buttons.
-        }
-        
-        // Let's re-use the builder to have standard buttons but with custom logic
-        dialog.dismiss()
         
         val finalDialog = AlertDialog.Builder(requireContext(), androidx.appcompat.R.style.Theme_AppCompat_Dialog_Alert)
             .setTitle("Προσθήκη Κάρτας")
             .setView(dialogBinding.root)
-            .setPositiveButton("Αποθήκευση", null) // Set to null first to prevent auto-dismiss
+            .setPositiveButton("Αποθήκευση", null)
             .setNegativeButton("Ακύρωση", null)
             .create()
 
@@ -132,12 +124,12 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-        finalDialog.show()
+        
         setupCardLogic(dialogBinding)
+        finalDialog.show()
     }
 
     private fun setupCardLogic(dialogBinding: DialogAddCardBinding) {
-        // Card Number Formatting & Detection
         dialogBinding.etDialogCardNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val original = s.toString().replace(" ", "")
@@ -154,20 +146,19 @@ class ProfileFragment : Fragment() {
                     dialogBinding.etDialogCardNumber.addTextChangedListener(this)
                 }
 
-                // Detect Card Type
                 val logo = when {
                     original.startsWith("4") -> R.drawable.p_visa
                     original.matches(Regex("^(5[1-5]|2[2-7]).*")) -> R.drawable.p_mastercard
                     original.startsWith("34") || original.startsWith("37") -> R.drawable.p_american_express
                     else -> R.drawable.p_card_default
                 }
-                dialogBinding.etDialogCardNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, logo, 0)
+                // Χρήση του ξεχωριστού ImageView αντί για Compound Drawable
+                dialogBinding.ivCardLogo.setImageResource(logo)
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        // Expiry Date Formatting (MM/YY)
         dialogBinding.etDialogExpiry.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s?.length == 2 && !s.contains("/")) {
@@ -187,12 +178,8 @@ class ProfileFragment : Fragment() {
         }
         
         val isAmex = number.startsWith("34") || number.startsWith("37")
-        if (isAmex && number.length != 15) {
-            Toast.makeText(requireContext(), "Η American Express απαιτεί 15 ψηφία", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (!isAmex && number.length != 16) {
-            Toast.makeText(requireContext(), "Ο αριθμός κάρτας πρέπει να έχει 16 ψηφία", Toast.LENGTH_SHORT).show()
+        if ((isAmex && number.length != 15) || (!isAmex && number.length != 16)) {
+            Toast.makeText(requireContext(), "Λάθος αριθμός ψηφίων", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -203,25 +190,11 @@ class ProfileFragment : Fragment() {
 
         try {
             val parts = expiry.split("/")
-            val month = parts[0].toInt()
-            val year = parts[1].toInt() + 2000
-            
-            val calendar = Calendar.getInstance()
-            val currentYear = calendar.get(Calendar.YEAR)
-            val currentMonth = calendar.get(Calendar.MONTH) + 1
-
-            if (month < 1 || month > 12) {
-                Toast.makeText(requireContext(), "Μήνας 01-12", Toast.LENGTH_SHORT).show()
-                return false
-            }
-
-            if (year < currentYear || (year == currentYear && month < currentMonth)) {
+            if (DateUtils.isCardExpired(parts[0].toInt(), parts[1].toInt())) {
                 Toast.makeText(requireContext(), "Η κάρτα έχει λήξει", Toast.LENGTH_SHORT).show()
                 return false
             }
-        } catch (e: Exception) {
-            return false
-        }
+        } catch (e: Exception) { return false }
 
         if (cvv.length < 3) {
             Toast.makeText(requireContext(), "Μη έγκυρο CVV", Toast.LENGTH_SHORT).show()
@@ -265,8 +238,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showDeleteAccountConfirmation() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_add_card, null) // Reusing a layout or creating new
-        // For delete, we need a password field
         val passwordInput = com.google.android.material.textfield.TextInputEditText(requireContext())
         passwordInput.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
         passwordInput.hint = "Κωδικός πρόσβασης"

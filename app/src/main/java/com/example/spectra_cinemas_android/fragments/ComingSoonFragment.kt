@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.spectra_cinemas_android.MainActivity
+import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.adapters.ComingSoonAdapter
 import com.example.spectra_cinemas_android.databinding.ComingSoonViewBinding
 import com.example.spectra_cinemas_android.utils.ComingSoonData
@@ -29,14 +30,14 @@ class ComingSoonFragment : Fragment() {
 
         val movies = ComingSoonData.getComingSoonMovies()
         val adapter = ComingSoonAdapter(movies) { movie ->
-            // Άνοιγμα λεπτομερειών μέσω της MainActivity
             (activity as? MainActivity)?.replaceFragment(
                 ComingSoonDetailsFragment.newInstance(movie.title),
                 "Λεπτομέρειες"
             )
         }
 
-        binding.comingSoonRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        val columns = resources.getInteger(R.integer.grid_columns)
+        binding.comingSoonRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.comingSoonRecyclerView.adapter = adapter
     }
 
