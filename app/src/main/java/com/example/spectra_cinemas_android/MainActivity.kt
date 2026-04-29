@@ -130,6 +130,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setUIForBooking(isSelection)
         applyImmersiveMode()
 
+        // Ενημέρωση επιλογής στο μενού
+        val menuId = when (fragment) {
+            is MoviesFragment -> R.id.nav_movies
+            is CinemasFragment -> R.id.nav_cinemas
+            is HallsFragment -> R.id.nav_halls
+            is ComingSoonFragment -> R.id.nav_coming_soon
+            is CanteenFragment -> R.id.nav_canteen
+            is ContactFragment -> R.id.nav_contact
+            is HistoryFragment -> R.id.nav_history
+            is LoginFragment -> R.id.nav_login
+            is RegisterFragment -> R.id.nav_register
+            is ProfileFragment -> R.id.nav_profile
+            else -> null
+        }
+        menuId?.let { binding.navView.setCheckedItem(it) }
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)

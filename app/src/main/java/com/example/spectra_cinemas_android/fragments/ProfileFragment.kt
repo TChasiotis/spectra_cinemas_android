@@ -201,6 +201,19 @@ class ProfileFragment : Fragment() {
             Toast.makeText(requireContext(), "Παρακαλώ εισάγετε το όνομα κατόχου", Toast.LENGTH_SHORT).show()
             return false
         }
+        
+        val logo = when {
+            number.startsWith("4") -> R.drawable.p_visa
+            number.matches(Regex("^(5[1-5]|2[2-7]).*")) -> R.drawable.p_mastercard
+            number.startsWith("34") || number.startsWith("37") -> R.drawable.p_american_express
+            else -> null
+        }
+
+        if (logo == null) {
+            Toast.makeText(requireContext(), "Δεκτές μόνο κάρτες Visa, Mastercard ή American Express", Toast.LENGTH_LONG).show()
+            return false
+        }
+
         if (number.length < 15) {
             Toast.makeText(requireContext(), "Μη έγκυρος αριθμός κάρτας", Toast.LENGTH_SHORT).show()
             return false

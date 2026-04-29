@@ -103,6 +103,7 @@ class BookingPaymentFragment : Fragment() {
             .addOnSuccessListener { doc ->
                 if (doc != null && isAdded) {
                     userAge = doc.getLong("age")?.toInt() ?: 0
+                    @Suppress("UNCHECKED_CAST")
                     preferredCard = doc.get("cardInfo") as? Map<String, Any>
                     updatePaymentUI()
                 }
@@ -146,11 +147,13 @@ class BookingPaymentFragment : Fragment() {
         
         binding.txtHolder.setText(preferredCard!!["cardHolder"] as? String ?: "")
         binding.txtCardNumber.setText(if (isAmex) "$first3* **** **** ${fullNumber.takeLast(3)}" else "$first3* **** **** $last4")
+        binding.txtExpiry.setText(preferredCard!!["expiry"] as? String ?: "")
+        binding.txtCVV.setText("***")
+
         binding.txtCardNumber.isEnabled = false
         binding.txtHolder.isEnabled = false
-        binding.txtMonth.visibility = View.GONE
-        binding.txtYear.visibility = View.GONE
-        binding.txtCVV.visibility = View.GONE
+        binding.txtExpiry.isEnabled = false
+        binding.txtCVV.isEnabled = false
         
         updateCardLogo(fullNumber)
     }
@@ -170,11 +173,13 @@ class BookingPaymentFragment : Fragment() {
         
         binding.txtCardNumber.isEnabled = true
         binding.txtHolder.isEnabled = true
+        binding.txtExpiry.isEnabled = true
+        binding.txtCVV.isEnabled = true
+
         binding.txtCardNumber.setText("")
         binding.txtHolder.setText("")
-        binding.txtMonth.visibility = View.VISIBLE
-        binding.txtYear.visibility = View.VISIBLE
-        binding.txtCVV.visibility = View.VISIBLE
+        binding.txtExpiry.setText("")
+        binding.txtCVV.setText("")
         binding.imgCardLogo.setImageResource(R.drawable.p_card_default)
     }
 
@@ -205,11 +210,18 @@ class BookingPaymentFragment : Fragment() {
                 val digits = s.toString().replace(" ", "")
                 updateCardLogo(digits)
                 
-                // Formatting logic (simplified for briefness, like in FX controller)
+                val isAmex = digits.startsWith("34") || digits.startsWith("37")
+                val maxLength = if (isAmex) 15 else 16
+                
+                var cleanDigits = digits
+                if (cleanDigits.length > maxLength) {
+                    cleanDigits = cleanDigits.substring(0, maxLength)
+                }
+
                 val formatted = StringBuilder()
-                for (i in digits.indices) {
+                for (i in cleanDigits.indices) {
                     if (i > 0 && i % 4 == 0) formatted.append(" ")
-                    formatted.append(digits[i])
+                    formatted.append(cleanDigits[i])
                 }
                 if (formatted.toString() != s.toString()) {
                     binding.txtCardNumber.removeTextChangedListener(this)
@@ -221,29 +233,23 @@ class BookingPaymentFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-    }
 
-    private fun updateCardLogo(number: String) {
-        val logo = when {
-            number.startsWith("4") -> R.drawable.p_visa
-            number.matches(Regex("^(5[1-5]|2[2-7]).*")) -> R.drawable.p_mastercard
-            number.startsWith("34") || number.startsWith("37") -> R.drawable.p_american_express
-            else -> R.drawable.p_card_default
-        }
-        binding.imgCardLogo.setImageResource(logo)
+        binding.txtExpiry.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length == 2 && !s.contains("/")) {
+                    binding.txtExpiry.setText(String.format(Locale.getDefault(), "%s/", s))
+                    binding.txtExpiry.setSelection(3)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun handleFinish() {
-        if (isCardPayment && preferredCard == null) {
-            if (!validateInputs()) return
-        }
+        val isPreferredMode = preferredCard != null && binding.btnTogglePreferred.backgroundTintList == ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red_primary))
         
-        // Αν είναι σε Preferred mode, δεν χρειάζεται validate (είναι ήδη ελεγμένη)
-        if (isCardPayment && preferredCard != null && binding.btnTogglePreferred.backgroundTintList == ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red_primary))) {
-            // OK
-        } else if (isCardPayment && !validateInputs()) {
-            return
-        }
+        if (isCardPayment && !isPreferredMode && !validateInputs()) return
 
         startLoading()
     }
@@ -251,12 +257,17 @@ class BookingPaymentFragment : Fragment() {
     private fun validateInputs(): Boolean {
         val holder = binding.txtHolder.text.toString()
         val number = binding.txtCardNumber.text.toString().replace(" ", "")
-        val month = binding.txtMonth.text.toString()
-        val year = binding.txtYear.text.toString()
+        val expiry = binding.txtExpiry.text.toString()
         val cvv = binding.txtCVV.text.toString()
 
-        if (holder.isEmpty() || number.isEmpty() || month.isEmpty() || year.isEmpty() || cvv.isEmpty()) {
+        if (holder.isEmpty() || number.isEmpty() || expiry.isEmpty() || cvv.isEmpty()) {
             showError("Συμπληρώστε όλα τα πεδία")
+            return false
+        }
+
+        val logo = getCardLogoRes(number)
+        if (logo == R.drawable.p_card_default) {
+            showError("Δεκτές μόνο Visa, Mastercard ή American Express")
             return false
         }
 
@@ -267,13 +278,35 @@ class BookingPaymentFragment : Fragment() {
         }
 
         try {
-            if (DateUtils.isCardExpired(month.toInt(), year.toInt())) {
-                showError("Η κάρτα έχει λήξει")
+            val parts = expiry.split("/")
+            if (parts.size != 2 || DateUtils.isCardExpired(parts[0].toInt(), parts[1].toInt())) {
+                showError("Η κάρτα έχει λήξει ή λάθος ημερομηνία")
                 return false
             }
-        } catch (e: Exception) { return false }
+        } catch (e: Exception) { 
+            showError("Λάθος μορφή ημερομηνίας")
+            return false 
+        }
+
+        if (cvv.length < 3) {
+            showError("Το CVV πρέπει να είναι 3 ψηφία")
+            return false
+        }
 
         return true
+    }
+
+    private fun updateCardLogo(number: String) {
+        binding.imgCardLogo.setImageResource(getCardLogoRes(number))
+    }
+
+    private fun getCardLogoRes(number: String): Int {
+        return when {
+            number.startsWith("4") -> R.drawable.p_visa
+            number.matches(Regex("^(5[1-5]|2[2-7]).*")) -> R.drawable.p_mastercard
+            number.startsWith("34") || number.startsWith("37") -> R.drawable.p_american_express
+            else -> R.drawable.p_card_default
+        }
     }
 
     private fun showError(msg: String) {
@@ -286,7 +319,6 @@ class BookingPaymentFragment : Fragment() {
         binding.loadingBox.visibility = View.VISIBLE
         
         Handler(Looper.getMainLooper()).postDelayed({
-            // Εδώ θα πηγαίναμε στο BookingFinalFragment
             Toast.makeText(requireContext(), "Η κράτηση ολοκληρώθηκε!", Toast.LENGTH_LONG).show()
         }, 2000)
     }
