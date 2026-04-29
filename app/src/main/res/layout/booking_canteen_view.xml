@@ -21,20 +21,27 @@
         <TextView android:id="@+id/movieTitleLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TITLOS TAINIAS" android:textColor="#FFFFFF" android:textSize="24sp" android:textStyle="bold" android:layout_marginBottom="10dp"/>
 
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="15dp">
-            <TextView android:id="@+id/lblDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ημερομηνία" android:background="#CC333333" android:textColor="#FFFFFF" android:padding="8dp" android:layout_marginEnd="10dp"/>
-            <TextView android:id="@+id/lblCinema" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Αίθουσα" android:background="#CC333333" android:textColor="#FFFFFF" android:padding="8dp"/>
+            <TextView android:id="@+id/lblDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ημερομηνία" android:background="@drawable/f_rounded_bg_dark" android:textColor="#FFFFFF" android:padding="8dp" android:layout_marginEnd="10dp"/>
+            <TextView android:id="@+id/lblCinema" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Αίθουσα" android:background="@drawable/f_rounded_bg_dark" android:textColor="#FFFFFF" android:padding="8dp"/>
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:orientation="horizontal"
-            android:background="#333333"
-            android:padding="3dp">
+            app:cardBackgroundColor="#333333"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="0dp">
 
-            <Button android:id="@+id/btnSnacks" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#00FF00" android:text="SNACKS" android:textColor="#000000" android:textStyle="bold"/>
-            <Button android:id="@+id/btnDrinks" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#00000000" android:text="DRINKS" android:textColor="#FFFFFF" android:textStyle="bold"/>
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <Button android:id="@+id/btnSnacks" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/f_btn_active_background" android:backgroundTint="@color/red_primary" android:text="SNACKS" android:textColor="#FFFFFF" android:textStyle="bold" android:padding="0dp" style="?android:attr/borderlessButtonStyle"/>
+                <Button android:id="@+id/btnDrinks" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@android:color/transparent" android:text="DRINKS" android:textColor="#FFFFFF" android:textStyle="bold" android:padding="0dp" style="?android:attr/borderlessButtonStyle"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

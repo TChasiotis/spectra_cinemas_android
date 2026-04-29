@@ -19,7 +19,7 @@
             android:title="Προσεχώς" />
         <item
             android:id="@+id/nav_canteen"
-            android:icon="@android:drawable/ic_menu_gallery"
+            android:icon="@drawable/f_popcorn"
             android:title="Κυλικείο" />
         <item
             android:id="@+id/nav_contact"

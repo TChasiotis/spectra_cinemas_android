@@ -16,6 +16,24 @@
         android:textStyle="bold"
         android:layout_marginBottom="20dp"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:hint="Όνομα Κατόχου"
+        android:textColorHint="#CCCCCC"
+        app:boxStrokeColor="@color/red_primary"
+        app:hintTextColor="@color/red_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDialogCardHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapCharacters"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

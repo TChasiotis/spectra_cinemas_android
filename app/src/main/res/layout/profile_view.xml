@@ -71,10 +71,20 @@
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
+                    <TextView
+                        android:id="@+id/tvProfileBirthDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Ημ. Γέννησης: -"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cvCardSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

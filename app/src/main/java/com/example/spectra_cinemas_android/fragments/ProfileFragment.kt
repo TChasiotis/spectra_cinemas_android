@@ -77,24 +77,48 @@ class ProfileFragment : Fragment() {
                 if (document != null && isAdded) {
                     val name = document.getString("fullName") ?: "N/A"
                     val email = document.getString("email") ?: "N/A"
+                    val birthDate = document.getString("birthDate") ?: "N/A"
                     val age = document.getLong("age") ?: 0
                     val cardInfo = document.get("cardInfo") as? Map<*, *>
 
                     binding.tvProfileName.text = "Ονοματεπώνυμο: $name"
                     binding.tvProfileEmail.text = "Email: $email"
+                    binding.tvProfileBirthDate.text = "Ημ. Γέννησης: $birthDate"
 
                     if (cardInfo != null) {
                         val fullNumber = cardInfo["cardNumber"] as? String ?: ""
-                        val last4 = if (fullNumber.length >= 4) fullNumber.takeLast(4) else "****"
-                        binding.tvCardNumber.text = "**** **** **** $last4"
+                        val isAmex = fullNumber.startsWith("34") || fullNumber.startsWith("37")
+                        
+                        val first3 = if (fullNumber.length >= 3) fullNumber.take(3) else ""
+                        
+                        if (isAmex) {
+                            val last3 = if (fullNumber.length >= 3) fullNumber.takeLast(3) else "***"
+                            binding.tvCardNumber.text = "$first3* **** **** $last3"
+                        } else {
+                            val last4 = if (fullNumber.length >= 4) fullNumber.takeLast(4) else "****"
+                            binding.tvCardNumber.text = "$first3* **** **** $last4"
+                        }
+                        
+                        val logo = when {
+                            fullNumber.startsWith("4") -> R.drawable.p_visa
+                            fullNumber.matches(Regex("^(5[1-5]|2[2-7]).*")) -> R.drawable.p_mastercard
+                            isAmex -> R.drawable.p_american_express
+                            else -> R.drawable.p_card_default
+                        }
+                        binding.ivCardIcon.setImageResource(logo)
+                        binding.ivCardIcon.imageTintList = null
+
                         binding.layoutCardInfo.visibility = View.VISIBLE
                         binding.btnAddCardProfile.visibility = View.GONE
+                        binding.cvCardSection.visibility = View.VISIBLE
                     } else {
                         binding.layoutCardInfo.visibility = View.GONE
                         if (age >= 18) {
                             binding.btnAddCardProfile.visibility = View.VISIBLE
+                            binding.cvCardSection.visibility = View.VISIBLE
                         } else {
                             binding.btnAddCardProfile.visibility = View.GONE
+                            binding.cvCardSection.visibility = View.GONE
                         }
                     }
                 }
@@ -114,12 +138,13 @@ class ProfileFragment : Fragment() {
         finalDialog.setOnShowListener {
             val saveBtn = finalDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             saveBtn.setOnClickListener {
+                val cardHolder = dialogBinding.etDialogCardHolder.text.toString()
                 val cardNumber = dialogBinding.etDialogCardNumber.text.toString().replace(" ", "")
                 val expiry = dialogBinding.etDialogExpiry.text.toString()
                 val cvv = dialogBinding.etDialogCVV.text.toString()
 
-                if (validateCard(cardNumber, expiry, cvv)) {
-                    saveCard(cardNumber, expiry, cvv)
+                if (validateCard(cardHolder, cardNumber, expiry, cvv)) {
+                    saveCard(cardHolder, cardNumber, expiry, cvv)
                     finalDialog.dismiss()
                 }
             }
@@ -171,15 +196,23 @@ class ProfileFragment : Fragment() {
         })
     }
 
-    private fun validateCard(number: String, expiry: String, cvv: String): Boolean {
+    private fun validateCard(holder: String, number: String, expiry: String, cvv: String): Boolean {
+        if (holder.isEmpty()) {
+            Toast.makeText(requireContext(), "Παρακαλώ εισάγετε το όνομα κατόχου", Toast.LENGTH_SHORT).show()
+            return false
+        }
         if (number.length < 15) {
             Toast.makeText(requireContext(), "Μη έγκυρος αριθμός κάρτας", Toast.LENGTH_SHORT).show()
             return false
         }
         
         val isAmex = number.startsWith("34") || number.startsWith("37")
-        if ((isAmex && number.length != 15) || (!isAmex && number.length != 16)) {
-            Toast.makeText(requireContext(), "Λάθος αριθμός ψηφίων", Toast.LENGTH_SHORT).show()
+        if (isAmex && number.length != 15) {
+            Toast.makeText(requireContext(), "Οι κάρτες American Express πρέπει να έχουν 15 ψηφία", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if (!isAmex && number.length != 16) {
+            Toast.makeText(requireContext(), "Ο αριθμός της κάρτας πρέπει να έχει 16 ψηφία", Toast.LENGTH_LONG).show()
             return false
         }
 
@@ -204,9 +237,10 @@ class ProfileFragment : Fragment() {
         return true
     }
 
-    private fun saveCard(number: String, expiry: String, cvv: String) {
+    private fun saveCard(holder: String, number: String, expiry: String, cvv: String) {
         val userId = auth.currentUser?.uid ?: return
         val cardData = mapOf(
+            "cardHolder" to holder,
             "cardNumber" to number,
             "expiry" to expiry,
             "cvv" to cvv

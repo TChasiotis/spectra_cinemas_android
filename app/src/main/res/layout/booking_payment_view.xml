@@ -61,11 +61,11 @@
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#4DFFFFFF" android:layout_marginBottom="15dp"/>
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="15dp">
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.2" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΤΟΠΟΘΕΣΙΑ" android:textColor="#AAAAAA" android:textSize="12sp"/>
                         <TextView android:id="@+id/lblSummaryCinema" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Spectra" android:textColor="#FFFFFF" android:textStyle="bold"/>
                     </LinearLayout>
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.8" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΑΙΘΟΥΣΑ" android:textColor="#AAAAAA" android:textSize="12sp"/>
                         <TextView android:id="@+id/lblSummaryHall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hall Name" android:textColor="#FFFFFF" android:textStyle="bold"/>
                     </LinearLayout>
@@ -91,9 +91,10 @@
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ΤΡΟΠΟΣ ΠΛΗΡΩΜΗΣ" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" android:layout_marginBottom="15dp"/>
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="50dp" android:orientation="horizontal" android:layout_marginBottom="25dp">
-                <Button android:id="@+id/btnToggleCard" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#00FF00" android:text="💳 ΚΑΡΤΑ" android:textColor="#000000" android:textStyle="bold" android:layout_marginEnd="5dp"/>
-                <Button android:id="@+id/btnToggleCash" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#333333" android:text="💵 ΤΑΜΕΙΟ" android:textColor="#FFFFFF" android:textStyle="bold" android:layout_marginStart="5dp"/>
+            <LinearLayout android:id="@+id/layoutPaymentToggle" android:layout_width="match_parent" android:layout_height="50dp" android:orientation="horizontal" android:layout_marginBottom="25dp">
+                <Button android:id="@+id/btnTogglePreferred" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#333333" android:text="⭐ ΑΠΟΘ." android:textColor="#FFFFFF" android:textStyle="bold" android:layout_marginEnd="2dp" android:textSize="12sp" android:visibility="gone"/>
+                <Button android:id="@+id/btnToggleCard" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#00FF00" android:text="💳 ΚΑΡΤΑ" android:textColor="#000000" android:textStyle="bold" android:layout_marginEnd="2dp" android:layout_marginStart="2dp" android:textSize="12sp"/>
+                <Button android:id="@+id/btnToggleCash" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:backgroundTint="#333333" android:text="💵 ΤΑΜΕΙΟ" android:textColor="#FFFFFF" android:textStyle="bold" android:layout_marginStart="2dp" android:textSize="12sp"/>
             </LinearLayout>
 
             <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">

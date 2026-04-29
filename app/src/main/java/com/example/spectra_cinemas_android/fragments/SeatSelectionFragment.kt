@@ -253,7 +253,15 @@ class SeatSelectionFragment : Fragment() {
     }
 
     private fun handleContinue() {
-        // Επόμενο βήμα: Κυλικείο
+        val fragment = BookingCanteenFragment.newInstance(
+            movie?.title ?: "",
+            cinema,
+            hallName,
+            date,
+            time,
+            selectedSeats
+        )
+        (activity as? MainActivity)?.replaceFragment(fragment, "Κυλικείο")
     }
 
     override fun onDestroyView() {
