@@ -14,6 +14,9 @@ import com.example.spectra_cinemas_android.models.Cinema
 import com.example.spectra_cinemas_android.models.Snack
 import com.example.spectra_cinemas_android.models.Hall
 import com.example.spectra_cinemas_android.models.Office
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class AdminDatabaseFragment : Fragment() {
@@ -50,8 +53,15 @@ class AdminDatabaseFragment : Fragment() {
         binding.btnUpdate.setOnClickListener { handleUpdate() }
         binding.btnDelete.setOnClickListener { handleDelete() }
 
+        // Room Queries
         binding.btnQueryCheap.setOnClickListener { runCheapSnacksQuery() }
         binding.btnQueryCity.setOnClickListener { runCinemaQuery() }
+        binding.btnQuerySearchOffice.setOnClickListener { runSearchOfficeQuery() }
+
+        // Firestore Queries
+        binding.btnFsQueryPaid.setOnClickListener { runFsPaidQuery() }
+        binding.btnFsQueryPrice.setOnClickListener { runFsPriceQuery() }
+        binding.btnFsQueryPending.setOnClickListener { runFsPendingQuery() }
     }
 
     private fun handleInsert() {
@@ -68,7 +78,6 @@ class AdminDatabaseFragment : Fragment() {
             try {
                 when (binding.tableSpinner.selectedItem?.toString()) {
                     "Cinemas" -> {
-                        // city, address, phone
                         val city = parts.getOrNull(0) ?: ""
                         val address = parts.getOrNull(1) ?: ""
                         val phone = parts.getOrNull(2) ?: ""
@@ -76,14 +85,12 @@ class AdminDatabaseFragment : Fragment() {
                         showToast("Cinema Inserted")
                     }
                     "Snacks" -> {
-                        // price, type
                         val price = parts.getOrNull(0)?.toDoubleOrNull() ?: 0.0
                         val type = parts.getOrNull(1)?.uppercase() ?: "SNACK"
                         db.appDao().insertSnack(Snack(name = id, price = price, type = type))
                         showToast("Snack Inserted ($type)")
                     }
                     "Halls" -> {
-                        // cinemaName, seats, rows, exits, tech
                         val cName = parts.getOrNull(0) ?: ""
                         val seats = parts.getOrNull(1) ?: "200"
                         val rows = parts.getOrNull(2) ?: "10"
@@ -93,7 +100,6 @@ class AdminDatabaseFragment : Fragment() {
                         showToast("Hall Inserted")
                     }
                     "Offices" -> {
-                        // subtitle, address, phone, email
                         val sub = parts.getOrNull(0) ?: ""
                         val addr = parts.getOrNull(1) ?: ""
                         val ph = parts.getOrNull(2) ?: ""
@@ -155,31 +161,6 @@ class AdminDatabaseFragment : Fragment() {
         }
     }
 
-    private fun updateHints(table: String) {
-        val format: String
-        when (table) {
-            "Cinemas" -> {
-                binding.inputId.hint = "Όνομα Σινεμά"
-                format = "Πόλη, Διεύθυνση, Τηλέφωνο"
-            }
-            "Snacks" -> {
-                binding.inputId.hint = "Όνομα Σνακ"
-                format = "Τιμή, Τύπος (SNACK/DRINK)"
-            }
-            "Halls" -> {
-                binding.inputId.hint = "Τίτλος Αίθουσας"
-                format = "Όνομα Σινεμά, Θέσεις, Σειρές, Έξοδοι, Τεχνολογία"
-            }
-            "Offices" -> {
-                binding.inputId.hint = "Τίτλος Γραφείου"
-                format = "Υπότιτλος, Διεύθυνση, Τηλέφωνο, Email"
-            }
-            else -> format = ""
-        }
-        binding.txtFormatHelp.text = "Μορφή: $format"
-        binding.inputData.hint = format
-    }
-
     private fun handleDelete() {
         val id = binding.inputId.text.toString().trim()
         if (id.isEmpty()) return
@@ -226,6 +207,72 @@ class AdminDatabaseFragment : Fragment() {
                 binding.txtResults.text = "Error: ${e.message}"
             }
         }
+    }
+
+    private fun runSearchOfficeQuery() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val results = db.appDao().searchOffices("Κεντρικά")
+                binding.txtResults.text = "Offices like 'Κεντρικά':\n" + results.joinToString("\n") { it.title }
+            } catch (e: Exception) {
+                binding.txtResults.text = "Error: ${e.message}"
+            }
+        }
+    }
+
+    private fun runFsPaidQuery() {
+        val uid = Firebase.auth.currentUser?.uid ?: return
+        Firebase.firestore.collection("users").document(uid).collection("bookings")
+            .whereEqualTo("paymentStatus", "ΕΞΟΦΛΗΘΗΚΕ (Κάρτα)")
+            .get()
+            .addOnSuccessListener { docs ->
+                binding.txtResults.text = "Paid Bookings (Firestore):\n" + docs.joinToString("\n") { it.getString("movieTitle") ?: "" }
+            }
+    }
+
+    private fun runFsPriceQuery() {
+        val uid = Firebase.auth.currentUser?.uid ?: return
+        Firebase.firestore.collection("users").document(uid).collection("bookings")
+            .whereGreaterThan("price", "15.00€")
+            .get()
+            .addOnSuccessListener { docs ->
+                binding.txtResults.text = "Expensive Bookings (>15€):\n" + docs.joinToString("\n") { it.getString("movieTitle") ?: "" }
+            }
+    }
+
+    private fun runFsPendingQuery() {
+        val uid = Firebase.auth.currentUser?.uid ?: return
+        Firebase.firestore.collection("users").document(uid).collection("bookings")
+            .whereNotEqualTo("paymentStatus", "ΕΞΟΦΛΗΘΗΚΕ (Κάρτα)")
+            .get()
+            .addOnSuccessListener { docs ->
+                binding.txtResults.text = "Pending Bookings (Firestore):\n" + docs.joinToString("\n") { it.getString("movieTitle") ?: "" }
+            }
+    }
+
+    private fun updateHints(table: String) {
+        val format: String
+        when (table) {
+            "Cinemas" -> {
+                binding.inputId.hint = "Όνομα Σινεμά"
+                format = "Πόλη, Διεύθυνση, Τηλέφωνο"
+            }
+            "Snacks" -> {
+                binding.inputId.hint = "Όνομα Σνακ"
+                format = "Τιμή, Τύπος (SNACK/DRINK)"
+            }
+            "Halls" -> {
+                binding.inputId.hint = "Τίτλος Αίθουσας"
+                format = "Όνομα Σινεμά, Θέσεις, Σειρές, Έξοδοι, Τεχνολογία"
+            }
+            "Offices" -> {
+                binding.inputId.hint = "Τίτλος Γραφείου"
+                format = "Υπότιτλος, Διεύθυνση, Τηλέφωνο, Email"
+            }
+            else -> format = ""
+        }
+        binding.txtFormatHelp.text = "Μορφή: $format"
+        binding.inputData.hint = format
     }
 
     private fun showToast(msg: String) {

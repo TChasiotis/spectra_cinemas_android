@@ -93,7 +93,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Αποτελέσματα Queries:"
+            android:text="Ερωτήματα Room (3 διαφορετικά):"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"/>
@@ -102,15 +102,57 @@
             android:id="@+id/btn_query_cheap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Φθηνά Σνακ (Room Query &lt; 5€)"
+            android:text="1. Σνακ &lt; 5€ (Τελεστής &lt;)"
             android:backgroundTint="#333333"/>
 
         <Button
             android:id="@+id/btn_query_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Σινεμά στην Αθήνα (Room Query =)"
+            android:text="2. Σινεμά στην Αθήνα (Τελεστής =)"
             android:backgroundTint="#333333"/>
+
+        <Button
+            android:id="@+id/btn_query_search_office"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Αναζήτηση Γραφείων (Τελεστής LIKE)"
+            android:backgroundTint="#333333"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:layout_marginVertical="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ερωτήματα Firestore (3 διαφορετικά):"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btn_fs_query_paid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Εξοφλημένα (whereEqualTo)"
+            android:backgroundTint="#1A1A1A"/>
+
+        <Button
+            android:id="@+id/btn_fs_query_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Κρατήσεις > 15€ (whereGreaterThan)"
+            android:backgroundTint="#1A1A1A"/>
+
+        <Button
+            android:id="@+id/btn_fs_query_pending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Μη εξοφλημένα (whereNotEqualTo)"
+            android:backgroundTint="#1A1A1A"/>
 
         <TextView
             android:id="@+id/txt_results"

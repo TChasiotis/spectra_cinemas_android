@@ -68,6 +68,47 @@ class ProfileFragment : Fragment() {
         binding.btnDeleteAccount.setOnClickListener {
             showDeleteAccountConfirmation()
         }
+
+        binding.btnEditName.setOnClickListener {
+            showEditNameDialog()
+        }
+    }
+
+    private fun showEditNameDialog() {
+        val currentName = binding.tvProfileName.text.toString().substringAfter(": ").trim()
+        val input = com.google.android.material.textfield.TextInputEditText(requireContext())
+        input.setText(currentName)
+        input.setSelection(currentName.length)
+        
+        val container = android.widget.FrameLayout(requireContext())
+        val params = android.widget.FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        params.setMargins(60, 20, 60, 0)
+        input.layoutParams = params
+        container.addView(input)
+
+        AlertDialog.Builder(requireContext(), androidx.appcompat.R.style.Theme_AppCompat_Dialog_Alert)
+            .setTitle("Επεξεργασία Ονόματος")
+            .setView(container)
+            .setPositiveButton("ΑΠΟΘΗΚΕΥΣΗ") { _, _ ->
+                val newName = input.text.toString().trim()
+                if (newName.isNotEmpty() && newName != currentName) {
+                    updateUserNameInFirestore(newName)
+                }
+            }
+            .setNegativeButton("ΑΚΥΡΩΣΗ", null)
+            .show()
+    }
+
+    private fun updateUserNameInFirestore(newName: String) {
+        val userId = auth.currentUser?.uid ?: return
+        db.collection("users").document(userId).update("fullName", newName)
+            .addOnSuccessListener {
+                loadUserProfile()
+                Toast.makeText(requireContext(), "Το όνομα ενημερώθηκε", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Σφάλμα κατά την ενημέρωση", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun loadUserProfile() {
