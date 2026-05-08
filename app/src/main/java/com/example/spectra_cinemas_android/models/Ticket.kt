@@ -1,7 +1,12 @@
 package com.example.spectra_cinemas_android.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.io.Serializable
+
+@Entity(tableName = "local_tickets")
 data class Ticket(
-    val orderId: String,
+    @PrimaryKey val orderId: String,
     val movieTitle: String,
     val cinemaName: String,
     val hallName: String,
@@ -11,9 +16,10 @@ data class Ticket(
     val price: String,
     val snacks: String,
     val paymentStatus: String
-) {
-    // Το toString() για τη λίστα του ιστορικού, γραμμένο με τον "έξυπνο" τρόπο της Kotlin
+) : Serializable {
+
+    // Το toString() για τη λίστα του ιστορικού
     override fun toString(): String {
-        return "$date | $time - $movieTitle (Κωδικός: $orderId)"
+        return "$movieTitle - $date $time (#$orderId)"
     }
 }

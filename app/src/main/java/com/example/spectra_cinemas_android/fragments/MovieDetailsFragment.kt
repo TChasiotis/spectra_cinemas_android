@@ -20,6 +20,7 @@ import com.example.spectra_cinemas_android.utils.MovieData
 import com.example.spectra_cinemas_android.utils.VideoPlayer
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,10 +65,17 @@ class MovieDetailsFragment : Fragment() {
 
     private fun setupPage() {
         val movie = currentMovie ?: return
+        val mainActivity = (activity as? MainActivity)
 
         binding.titleLabel.text = movie.title
         binding.subtitleLabel.text = movie.englishTitle
         binding.descriptionText.text = movie.description
+
+        if (mainActivity?.isAdmin == true) {
+            binding.cinemaSelector.visibility = View.GONE
+            binding.showtimesContainer.visibility = View.GONE
+            binding.continueBtn.visibility = View.GONE
+        }
 
         val tags = movie.tags.split("|")
         if (tags.isNotEmpty()) binding.ratingLabel.text = tags[0].trim()
@@ -246,7 +254,13 @@ class MovieDetailsFragment : Fragment() {
         VideoPlayer.stop()
         val movie = currentMovie ?: return
         val imageView = ImageView(requireContext())
-        imageView.setImageResource(movie.imageResId)
+        
+        if (!movie.imageUrl.isNullOrEmpty()) {
+            Picasso.get().load(movie.imageUrl).into(imageView)
+        } else {
+            imageView.setImageResource(movie.imageResId)
+        }
+
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
         binding.mediaContainer.removeAllViews()
         binding.mediaContainer.addView(imageView)

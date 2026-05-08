@@ -5,11 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.adapters.CinemasAdapter
+import com.example.spectra_cinemas_android.database.AppDatabase
 import com.example.spectra_cinemas_android.databinding.CinemasViewBinding
-import com.example.spectra_cinemas_android.utils.CinemaData
+import com.example.spectra_cinemas_android.models.Cinema
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class CinemasFragment : Fragment() {
 
@@ -26,11 +30,22 @@ class CinemasFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeCinemas()
+    }
 
-        val cinemas = CinemaData.getAllCinemas()
+    private fun observeCinemas() {
+        val db = AppDatabase.getDatabase(requireContext())
+        viewLifecycleOwner.lifecycleScope.launch {
+            db.appDao().getAllCinemasLive().collectLatest { list ->
+                if (_binding != null) {
+                    setupRecyclerView(list)
+                }
+            }
+        }
+    }
+
+    private fun setupRecyclerView(cinemas: List<Cinema>) {
         val adapter = CinemasAdapter(cinemas)
-        
-        // Χρήση δυναμικού αριθμού στηλών (1 για portrait, 2 για landscape)
         val columns = resources.getInteger(R.integer.cinema_columns)
         binding.cinemasRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.cinemasRecyclerView.adapter = adapter

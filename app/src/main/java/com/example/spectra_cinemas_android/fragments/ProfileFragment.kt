@@ -17,6 +17,7 @@ import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.ProfileViewBinding
 import com.example.spectra_cinemas_android.databinding.DialogAddCardBinding
 import com.example.spectra_cinemas_android.utils.DateUtils
+import com.example.spectra_cinemas_android.utils.NotificationHelper
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -262,6 +263,7 @@ class ProfileFragment : Fragment() {
         db.collection("users").document(userId).update("cardInfo", cardData)
             .addOnSuccessListener {
                 loadUserProfile()
+                NotificationHelper.sendNotification(requireContext(), "Κάρτα Προστέθηκε", "Η προτιμώμενη κάρτα σας αποθηκεύτηκε με επιτυχία.")
                 Toast.makeText(requireContext(), "Η κάρτα προστέθηκε επιτυχώς!", Toast.LENGTH_SHORT).show()
             }
     }
@@ -280,6 +282,7 @@ class ProfileFragment : Fragment() {
         db.collection("users").document(userId).update("cardInfo", null)
             .addOnSuccessListener {
                 loadUserProfile()
+                NotificationHelper.sendNotification(requireContext(), "Κάρτα Αφαιρέθηκε", "Η προτιμώμενη κάρτα σας αφαιρέθηκε από το λογαριασμό.")
                 Toast.makeText(requireContext(), "Η κάρτα διαγράφηκε", Toast.LENGTH_SHORT).show()
             }
     }
@@ -332,6 +335,7 @@ class ProfileFragment : Fragment() {
             .addOnSuccessListener {
                 user.delete().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        NotificationHelper.sendNotification(requireContext(), "Λογαριασμός Διαγράφηκε", "Ο λογαριασμός σας και όλα τα δεδομένα διαγράφηκαν οριστικά.")
                         Toast.makeText(requireContext(), "Ο λογαριασμός διαγράφηκε οριστικά", Toast.LENGTH_LONG).show()
                         (activity as? MainActivity)?.let { mainActivity ->
                             mainActivity.setLoggedIn(false)

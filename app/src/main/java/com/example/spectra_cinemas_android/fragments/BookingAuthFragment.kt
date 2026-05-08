@@ -60,13 +60,50 @@ class BookingAuthFragment : Fragment() {
         }
 
         binding.btnBookingGuest.setOnClickListener {
-            movie?.let { m ->
-                (activity as? MainActivity)?.replaceFragment(
-                    SeatSelectionFragment.newInstance(m, cinema, date, time),
-                    "Επιλογή Θέσεων"
-                )
-            }
+            showGuestDetailsDialog()
         }
+    }
+
+    private fun showGuestDetailsDialog() {
+        val context = requireContext()
+        val layout = android.widget.LinearLayout(context)
+        layout.orientation = android.widget.LinearLayout.VERTICAL
+        layout.setPadding(60, 40, 60, 0)
+
+        val etName = android.widget.EditText(context)
+        etName.hint = "Ονοματεπώνυμο"
+        etName.setTextColor(android.graphics.Color.WHITE)
+        etName.setHintTextColor(android.graphics.Color.GRAY)
+
+        val etEmail = android.widget.EditText(context)
+        etEmail.hint = "Email (για το εισιτήριο)"
+        etEmail.setTextColor(android.graphics.Color.WHITE)
+        etEmail.setHintTextColor(android.graphics.Color.GRAY)
+        etEmail.inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+
+        layout.addView(etName)
+        layout.addView(etEmail)
+
+        androidx.appcompat.app.AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Dialog_Alert)
+            .setTitle("Στοιχεία Επισκέπτη")
+            .setMessage("Παρακαλώ δώστε τα στοιχεία σας για να σας σταλεί το εισιτήριο.")
+            .setView(layout)
+            .setPositiveButton("Συνέχεια") { _, _ ->
+                val name = etName.text.toString().trim()
+                val email = etEmail.text.toString().trim()
+                
+                if (name.isNotEmpty() && email.contains("@")) {
+                    movie?.let { m ->
+                        val fragment = SeatSelectionFragment.newInstance(m, cinema, date, time)
+                        // Μεταφορά των στοιχείων στο επόμενο fragment αν χρειαστεί
+                        (activity as? MainActivity)?.replaceFragment(fragment, "Επιλογή Θέσεων")
+                    }
+                } else {
+                    android.widget.Toast.makeText(context, "Παρακαλώ δώστε έγκυρα στοιχεία", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Ακύρωση", null)
+            .show()
     }
 
     override fun onDestroyView() {

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.databinding.LoginViewBinding
+import com.example.spectra_cinemas_android.utils.NotificationHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -52,6 +53,14 @@ class LoginFragment : Fragment() {
             return
         }
 
+        // ΕΙΔΙΚΟΣ ΕΛΕΓΧΟΣ ΓΙΑ ADMIN
+        if (email == "123456789" && password == "spectra") {
+            val mainActivity = (activity as? MainActivity)
+            mainActivity?.setLoggedIn(true, asAdmin = true)
+            mainActivity?.replaceFragment(AdminDatabaseFragment(), "Διαχείριση Βάσης")
+            return
+        }
+
         binding.btnLogin.isEnabled = false
         
         auth.signInWithEmailAndPassword(email, password)
@@ -60,6 +69,7 @@ class LoginFragment : Fragment() {
                     val user = auth.currentUser
                     if (user != null && user.isEmailVerified) {
                         // Επιτυχής είσοδος
+                        NotificationHelper.sendNotification(requireContext(), "Σύνδεση", "Συνδεθήκατε επιτυχώς στο λογαριασμό σας.")
                         val mainActivity = (activity as? MainActivity)
                         mainActivity?.setLoggedIn(true)
                         

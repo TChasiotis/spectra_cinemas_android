@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Διαχείριση Τοπικής Βάσης (Room)"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <Spinner
+            android:id="@+id/table_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/f_btn_active_background"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/input_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ID / Όνομα (Primary Key)"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/txt_format_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Μορφή: Στοιχείο1, Στοιχείο2..."
+            android:textColor="@color/red_primary"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/input_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Λοιπά Στοιχεία (π.χ. Πόλη, Τιμή)"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:layout_marginBottom="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_insert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INSERT"
+                android:backgroundTint="@color/red_primary"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btn_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UPDATE"
+                android:backgroundTint="@color/red_primary"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DELETE"
+                android:backgroundTint="@color/red_primary"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:layout_marginVertical="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Αποτελέσματα Queries:"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btn_query_cheap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Φθηνά Σνακ (Room Query &lt; 5€)"
+            android:backgroundTint="#333333"/>
+
+        <Button
+            android:id="@+id/btn_query_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Σινεμά στην Αθήνα (Room Query =)"
+            android:backgroundTint="#333333"/>
+
+        <TextView
+            android:id="@+id/txt_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Τα αποτελέσματα θα εμφανιστούν εδώ..."
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

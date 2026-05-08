@@ -1,13 +1,18 @@
 package com.example.spectra_cinemas_android.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.io.Serializable
+
+@Entity(tableName = "cinemas")
 data class Cinema(
-    val city: String,
-    val name: String,
-    val address: String,
-    val phone: String,
-    val imageResId: Int // Αλλαγή σε Int για τα drawables του Android!
-) {
-    // Το κρατάμε ακριβώς όπως το είχες στη Java για τα Dropdowns (Spinners)
+    @PrimaryKey val name: String = "",
+    val city: String = "",
+    val address: String = "",
+    val phone: String = "",
+    val imageResId: Int = 0,
+    val imageUrl: String? = null
+) : Serializable {
     override fun toString(): String {
         return name
     }

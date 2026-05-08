@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.spectra_cinemas_android.R
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spectra_cinemas_android.adapters.ContactAdapter
+import com.example.spectra_cinemas_android.database.AppDatabase
 import com.example.spectra_cinemas_android.databinding.ContactViewBinding
-import com.example.spectra_cinemas_android.utils.ContactData
+import com.example.spectra_cinemas_android.models.Office
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ContactFragment : Fragment() {
 
@@ -26,13 +29,21 @@ class ContactFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeOffices()
+    }
 
-        val offices = ContactData.getOffices()
+    private fun observeOffices() {
+        val db = AppDatabase.getDatabase(requireContext())
+        lifecycleScope.launch {
+            db.appDao().getAllOfficesLive().collectLatest { list ->
+                setupRecyclerView(list)
+            }
+        }
+    }
+
+    private fun setupRecyclerView(offices: List<Office>) {
         val adapter = ContactAdapter(offices)
-
-        // Χρήση δυναμικού αριθμού στηλών (1 για portrait, 2 για landscape)
-        val columns = resources.getInteger(R.integer.contact_columns)
-        binding.contactRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
+        binding.contactRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.contactRecyclerView.adapter = adapter
     }
 

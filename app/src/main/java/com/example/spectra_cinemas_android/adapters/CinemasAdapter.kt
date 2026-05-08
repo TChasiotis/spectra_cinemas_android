@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.models.Cinema
+import com.squareup.picasso.Picasso
 
 class CinemasAdapter(
     private val cinemasList: List<Cinema>
@@ -32,8 +33,11 @@ class CinemasAdapter(
         holder.addressText.text = "📍 ${cinema.address}"
         holder.phoneText.text = "📞 ${cinema.phone}"
 
-        // Η εικόνα από το drawable
-        holder.imageView.setImageResource(cinema.imageResId)
+        if (!cinema.imageUrl.isNullOrEmpty()) {
+            Picasso.get().load(cinema.imageUrl).placeholder(R.drawable.l_spectra_logo).into(holder.imageView)
+        } else {
+            holder.imageView.setImageResource(cinema.imageResId)
+        }
     }
 
     // Συνδέει τα IDs του XML σου με τον κώδικα

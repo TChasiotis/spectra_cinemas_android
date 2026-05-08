@@ -18,6 +18,7 @@ import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.BookingPaymentViewBinding
 import com.example.spectra_cinemas_android.utils.DateUtils
+import com.example.spectra_cinemas_android.utils.NotificationHelper
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -319,7 +320,22 @@ class BookingPaymentFragment : Fragment() {
         binding.loadingBox.visibility = View.VISIBLE
         
         Handler(Looper.getMainLooper()).postDelayed({
-            Toast.makeText(requireContext(), "Η κράτηση ολοκληρώθηκε!", Toast.LENGTH_LONG).show()
+            val status = if (isCardPayment) "ΕΞΟΦΛΗΘΗΚΕ (Κάρτα)" else "ΕΚΚΡΕΜΕΙ (Πληρωμή στο Ταμείο)"
+            
+            NotificationHelper.sendNotification(requireContext(), "Κράτηση Ολοκληρώθηκε", "Η κράτησή σας για την ταινία $movieTitle έγινε επιτυχώς!")
+
+            val fragment = BookingFinalFragment.newInstance(
+                movieTitle,
+                cinemaName,
+                hallName,
+                date,
+                time,
+                selectedSeats.joinToString(", "),
+                totalPrice,
+                status,
+                snacksInfo
+            )
+            (activity as? MainActivity)?.replaceFragment(fragment, "Επιβεβαίωση")
         }, 2000)
     }
 

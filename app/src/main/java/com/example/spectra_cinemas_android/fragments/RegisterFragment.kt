@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.databinding.RegisterViewBinding
 import com.example.spectra_cinemas_android.utils.DateUtils
+import com.example.spectra_cinemas_android.utils.NotificationHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -92,6 +93,7 @@ class RegisterFragment : Fragment() {
 
                     db.collection("users").document(userId).set(userProfile)
                         .addOnSuccessListener {
+                            NotificationHelper.sendNotification(requireContext(), "Καλώς ήρθατε!", "Ο λογαριασμός σας δημιουργήθηκε επιτυχώς στο Spectra Cinemas.")
                             auth.currentUser?.sendEmailVerification()?.addOnCompleteListener {
                                 Toast.makeText(requireContext(), "Ελέγξτε το email σας για επαλήθευση.", Toast.LENGTH_LONG).show()
                                 (activity as? MainActivity)?.replaceFragment(EmailVerificationFragment(), "Επαλήθευση")

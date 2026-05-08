@@ -8,7 +8,8 @@ object HallData {
         return listOf(
             Hall(
                 "Spectra IMAX",
-                R.drawable.h_imax_prooptikh, // Βάζω το όνομα όπως το είδα στο XML σου
+                "Spectra Cinemas Συγγρού (Αθήνα)", // Διόρθωση ονόματος για να ταιριάζει με το Cinema
+                R.drawable.h_imax_prooptikh,
                 "230 Θέσεις",
                 "10 Σειρές",
                 "4 Έξοδοι",
@@ -16,7 +17,8 @@ object HallData {
             ),
             Hall(
                 "Spectra Standard",
-                R.drawable.h_standard_prooptikh, // Υποθέτω αυτό είναι το όνομα του 2ου drawable
+                "Spectra Cinemas Μαρούσι (Αθήνα)", // Διόρθωση ονόματος
+                R.drawable.h_standard_prooptikh,
                 "200 Θέσεις",
                 "10 Σειρές",
                 "2 Έξοδοι",

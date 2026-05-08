@@ -14,8 +14,28 @@
         android:gravity="center"
         android:padding="20dp">
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Η ΚΡΑΤΗΣΗ ΟΛΟΚΛΗΡΩΘΗΚΕ!" android:textColor="#FFFFFF" android:textSize="22sp" android:textStyle="bold" android:textAlignment="center" android:layout_marginBottom="15dp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Σας ευχαριστούμε. Εδώ είναι το εισιτήριό σας:" android:textColor="#DDDDDD" android:textSize="14sp" android:background="#B3000000" android:padding="10dp" android:layout_marginBottom="25dp" android:textAlignment="center"/>
+        <TextView
+            android:id="@+id/lblSuccessHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Η ΚΡΑΤΗΣΗ ΟΛΟΚΛΗΡΩΘΗΚΕ!"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView
+            android:id="@+id/lblSuccessMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Σας ευχαριστούμε. Εδώ είναι το εισιτήριό σας:"
+            android:textColor="#DDDDDD"
+            android:textSize="14sp"
+            android:background="#B3000000"
+            android:padding="10dp"
+            android:layout_marginBottom="25dp"
+            android:textAlignment="center"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -78,37 +98,15 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btnHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="30dp">
-
-            <Button
-                android:id="@+id/btnGoogleWallet"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="5dp"
-                android:backgroundTint="#000000"
-                android:text="Google Wallet"
-                android:textColor="#FFFFFF"
-                android:textAllCaps="false"
-                android:textStyle="bold"/>
-
-            <Button
-                android:id="@+id/btnAppleWallet"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginStart="5dp"
-                android:backgroundTint="#000000"
-                android:text="Apple Wallet"
-                android:textColor="#FFFFFF"
-                android:textAllCaps="false"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <Button android:id="@+id/btnHome" android:layout_width="wrap_content" android:layout_height="50dp" android:backgroundTint="#00000000" android:text="ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΑΡΧΙΚΗ" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" />
+            android:layout_height="56dp"
+            android:backgroundTint="@color/red_primary"
+            android:text="ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΑΡΧΙΚΗ"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
     </LinearLayout>
 </ScrollView>

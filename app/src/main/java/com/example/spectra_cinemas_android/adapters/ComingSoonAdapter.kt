@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spectra_cinemas_android.databinding.MovieItemBinding
 import com.example.spectra_cinemas_android.models.Movie
+import com.squareup.picasso.Picasso
 
 class ComingSoonAdapter(
     private val movies: List<Movie>,
@@ -15,7 +16,12 @@ class ComingSoonAdapter(
     inner class MovieViewHolder(private val binding: MovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.movieTitle.text = movie.title
-            binding.moviePoster.setImageResource(movie.imageResId)
+            
+            if (!movie.imageUrl.isNullOrEmpty()) {
+                Picasso.get().load(movie.imageUrl).into(binding.moviePoster)
+            } else {
+                binding.moviePoster.setImageResource(movie.imageResId)
+            }
             
             // Εμφάνιση ημερομηνίας κυκλοφορίας
             binding.movieDate.visibility = View.VISIBLE

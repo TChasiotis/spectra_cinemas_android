@@ -3,8 +3,10 @@ package com.example.spectra_cinemas_android.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.SnackItemBinding
 import com.example.spectra_cinemas_android.models.Snack
+import com.squareup.picasso.Picasso
 
 class CanteenAdapter(
     private var snacks: List<Snack>
@@ -14,7 +16,12 @@ class CanteenAdapter(
         fun bind(snack: Snack) {
             binding.snackName.text = snack.name
             binding.snackPrice.text = String.format("%.2f€", snack.price)
-            binding.snackImage.setImageResource(snack.imageResId)
+            
+            if (!snack.imageUrl.isNullOrEmpty()) {
+                Picasso.get().load(snack.imageUrl).placeholder(R.drawable.f_popcorn).into(binding.snackImage)
+            } else {
+                binding.snackImage.setImageResource(snack.imageResId)
+            }
         }
     }
 

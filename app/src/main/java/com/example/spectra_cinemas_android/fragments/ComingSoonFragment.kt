@@ -10,7 +10,10 @@ import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.adapters.ComingSoonAdapter
 import com.example.spectra_cinemas_android.databinding.ComingSoonViewBinding
+import com.example.spectra_cinemas_android.models.Movie
 import com.example.spectra_cinemas_android.utils.ComingSoonData
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class ComingSoonFragment : Fragment() {
 
@@ -27,8 +30,12 @@ class ComingSoonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        // Χρήση τοπικών δεδομένων για ταχύτητα στην παρουσίαση
+        setupRecyclerView(ComingSoonData.getComingSoonMovies())
+    }
 
-        val movies = ComingSoonData.getComingSoonMovies()
+    private fun setupRecyclerView(movies: List<Movie>) {
         val adapter = ComingSoonAdapter(movies) { movie ->
             (activity as? MainActivity)?.replaceFragment(
                 ComingSoonDetailsFragment.newInstance(movie.title),

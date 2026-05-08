@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.databinding.EmailVerificationViewBinding
+import com.example.spectra_cinemas_android.utils.NotificationHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -56,6 +57,7 @@ class EmailVerificationFragment : Fragment() {
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 if (user != null && user.isEmailVerified) {
+                    NotificationHelper.sendNotification(requireContext(), "Επαλήθευση Επιτυχής", "Το email σας επαληθεύτηκε. Καλώς ήρθατε στο Spectra Cinemas!")
                     Toast.makeText(requireContext(), "Η επαλήθευση ολοκληρώθηκε!", Toast.LENGTH_SHORT).show()
                     
                     val mainActivity = (activity as? MainActivity)

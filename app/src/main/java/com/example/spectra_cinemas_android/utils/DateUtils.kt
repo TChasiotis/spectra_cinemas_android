@@ -47,6 +47,53 @@ object DateUtils {
     }
 
     /**
+     * Επιστρέφει "Σήμερα" αν η ημερομηνία αντιστοιχεί στην τρέχουσα μέρα,
+     * αλλιώς επιστρέφει την ίδια την ημερομηνία.
+     */
+    fun getDisplayDate(dateStr: String): String {
+        if (dateStr.lowercase() == "σήμερα") return "Σήμερα"
+        
+        val sdf = java.text.SimpleDateFormat("EEEE d/M", java.util.Locale("el", "GR"))
+        val todayStr = sdf.format(Calendar.getInstance().time).replaceFirstChar { it.uppercase() }
+        
+        return if (dateStr.trim().equals(todayStr.trim(), ignoreCase = true)) "Σήμερα" else dateStr
+    }
+
+    /**
+     * Μετατρέπει την ημερομηνία της εφαρμογής (π.χ. "Σήμερα", "Τρίτη 1/4") και την ώρα σε milliseconds
+     */
+    fun parseBookingTimeToMillis(dateStr: String, timeStr: String): Long {
+        val calendar = Calendar.getInstance()
+        try {
+            val timeParts = timeStr.split(":")
+            if (timeParts.size < 2) return 0
+            
+            val hour = timeParts[0].toInt()
+            val minute = timeParts[1].toInt()
+
+            if (dateStr.lowercase() != "σήμερα" && dateStr.isNotEmpty()) {
+                // Αν δεν είναι σήμερα, ψάχνουμε την ημερομηνία (π.χ. "Τρίτη 1/4")
+                val parts = dateStr.split(" ")
+                val dayMonth = parts.last() // Παίρνουμε το "1/4"
+                if (dayMonth.contains("/")) {
+                    val dmParts = dayMonth.split("/")
+                    calendar.set(Calendar.DAY_OF_MONTH, dmParts[0].toInt())
+                    calendar.set(Calendar.MONTH, dmParts[1].toInt() - 1)
+                }
+            }
+            
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+            calendar.set(Calendar.SECOND, 0)
+            calendar.set(Calendar.MILLISECOND, 0)
+            
+            return calendar.timeInMillis
+        } catch (e: Exception) {
+            return 0 // Σε περίπτωση λάθους, επιστρέφουμε 0 για να διαγραφεί η κράτηση ως "πολύ παλιά"
+        }
+    }
+
+    /**
      * Ελέγχει αν μια κάρτα έχει λήξει με βάση τον μήνα και το έτος (MM/YY)
      */
     fun isCardExpired(month: Int, yearYY: Int): Boolean {

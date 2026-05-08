@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.models.Movie
+import com.squareup.picasso.Picasso
 
 class MoviesAdapter(
     private val moviesList: List<Movie>,
@@ -27,7 +28,12 @@ class MoviesAdapter(
         val movie = moviesList[position]
 
         holder.titleText.text = movie.title
-        holder.posterImage.setImageResource(movie.imageResId)
+        
+        if (!movie.imageUrl.isNullOrEmpty()) {
+            Picasso.get().load(movie.imageUrl).placeholder(R.drawable.l_spectra_logo).into(holder.posterImage)
+        } else {
+            holder.posterImage.setImageResource(movie.imageResId)
+        }
 
         // Η ΜΑΓΕΙΑ ΕΔΩ: Ελέγχουμε αν υπάρχει ημερομηνία
         if (movie.releaseDate != null) {

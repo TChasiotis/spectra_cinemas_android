@@ -14,6 +14,7 @@ import com.example.spectra_cinemas_android.databinding.ComingSoonDetailsViewBind
 import com.example.spectra_cinemas_android.models.Movie
 import com.example.spectra_cinemas_android.utils.ComingSoonData
 import com.example.spectra_cinemas_android.utils.VideoPlayer
+import com.squareup.picasso.Picasso
 
 class ComingSoonDetailsFragment : Fragment() {
 
@@ -94,7 +95,16 @@ class ComingSoonDetailsFragment : Fragment() {
         binding.mediaContainer.removeAllViews()
         val imageView = ImageView(requireContext())
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-        currentMovie?.imageResId?.let { imageView.setImageResource(it) }
+        
+        val movie = currentMovie
+        if (movie != null) {
+            if (!movie.imageUrl.isNullOrEmpty()) {
+                Picasso.get().load(movie.imageUrl).into(imageView)
+            } else {
+                imageView.setImageResource(movie.imageResId)
+            }
+        }
+
         binding.mediaContainer.addView(imageView)
     }
 

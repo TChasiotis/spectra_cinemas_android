@@ -15,7 +15,8 @@ object ComingSoonData {
                 R.raw.cs_housemaid_trailer,
                 "R | PSYCHOLOGICAL THRILLER | 131'",
                 null,
-                "18 ΔΕΚΕΜΒΡΙΟΥ 2025"
+                "18 ΔΕΚΕΜΒΡΙΟΥ 2025",
+                true
             ),
             Movie(
                 "ΚΑΠΟΔΙΣΤΡΙΑΣ",
@@ -25,7 +26,8 @@ object ComingSoonData {
                 R.raw.cs_kapodistrias_trailer,
                 "K | DRAMA | 128'",
                 null,
-                "25 ΔΕΚΕΜΒΡΙΟΥ 2025"
+                "25 ΔΕΚΕΜΒΡΙΟΥ 2025",
+                true
             ),
             Movie(
                 "ΑΝΑΚΟΝΤΑ",
@@ -35,7 +37,8 @@ object ComingSoonData {
                 R.raw.cs_anaconda_trailer,
                 "K13 | COMEDY ACTION| 100'",
                 null,
-                "1 ΙΑΝΟΥΑΡΙΟΥ 2026"
+                "1 ΙΑΝΟΥΑΡΙΟΥ 2026",
+                true
             ),
             Movie(
                 "ΘΑΒΟΥΜΕ ΤΟΥΣ ΝΕΚΡΟΥΣ",
@@ -45,7 +48,8 @@ object ComingSoonData {
                 R.raw.cs_we_bury_trailer,
                 "K18 | HORROR | 94'",
                 null,
-                "1 ΙΑΝΟΥΑΡΙΟΥ 2026"
+                "1 ΙΑΝΟΥΑΡΙΟΥ 2026",
+                true
             ),
             Movie(
                 "GREENLAND 2",
@@ -55,7 +59,8 @@ object ComingSoonData {
                 R.raw.cs_greenland_trailer,
                 "K13 | SURVIVAL | 86'",
                 null,
-                "8 ΙΑΝΟΥΑΡΙΟΥ 2026"
+                "8 ΙΑΝΟΥΑΡΙΟΥ 2026",
+                true
             ),
             Movie(
                 "PRIMATE",
@@ -65,7 +70,8 @@ object ComingSoonData {
                 R.raw.cs_primate_trailer,
                 "K18 | HORROR | 89'",
                 null,
-                "8 ΙΑΝΟΥΑΡΙΟΥ 2026"
+                "8 ΙΑΝΟΥΑΡΙΟΥ 2026",
+                true
             ),
             Movie(
                 "28 ΧΡΟΝΙΑ ΜΕΤΑ: Ο ΝΑΟΣ ΤΩΝ ΟΣΤΩΝ",
@@ -75,7 +81,8 @@ object ComingSoonData {
                 R.raw.cs_bone_temple_trailer,
                 "K18 | HORROR | 109'",
                 null,
-                "15 ΙΑΝΟΥΑΡΙΟΥ 2026"
+                "15 ΙΑΝΟΥΑΡΙΟΥ 2026",
+                true
             )
         )
     }

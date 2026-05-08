@@ -32,13 +32,28 @@
             android:padding="8dp"/>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/historyList"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="15dp"
-        android:clipToPadding="false"/>
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:clipToPadding="false"/>
+
+        <TextView
+            android:id="@+id/txtNoHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Δεν υπάρχουν κρατήσεις"
+            android:textColor="#888888"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

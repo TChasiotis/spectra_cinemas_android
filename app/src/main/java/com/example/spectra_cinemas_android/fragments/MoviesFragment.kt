@@ -10,7 +10,10 @@ import com.example.spectra_cinemas_android.MainActivity
 import com.example.spectra_cinemas_android.R
 import com.example.spectra_cinemas_android.adapters.MoviesAdapter
 import com.example.spectra_cinemas_android.databinding.MoviesViewBinding
+import com.example.spectra_cinemas_android.models.Movie
 import com.example.spectra_cinemas_android.utils.MovieData
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MoviesFragment : Fragment() {
 
@@ -27,16 +30,27 @@ class MoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        // Χρήση τοπικών δεδομένων για ταχύτητα στην παρουσίαση
+        setupRecyclerView(MovieData.getMovies())
+    }
 
-        val movies = MovieData.getMovies()
+    private fun setupRecyclerView(movies: List<Movie>) {
+        val mainActivity = (activity as? MainActivity)
         val adapter = MoviesAdapter(movies) { movie ->
-            (activity as? MainActivity)?.replaceFragment(
-                MovieDetailsFragment.newInstance(movie.title),
-                movie.title
-            )
+            if (mainActivity?.isAdmin == true) {
+                mainActivity.replaceFragment(
+                    MovieDetailsFragment.newInstance(movie.title),
+                    movie.title
+                )
+            } else {
+                (activity as? MainActivity)?.replaceFragment(
+                    MovieDetailsFragment.newInstance(movie.title),
+                    movie.title
+                )
+            }
         }
 
-        // Χρήση του δυναμικού αριθμού στηλών από τα resources (2 για portrait, 3 για landscape)
         val columns = resources.getInteger(R.integer.grid_columns)
         binding.moviesRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
         binding.moviesRecyclerView.adapter = adapter

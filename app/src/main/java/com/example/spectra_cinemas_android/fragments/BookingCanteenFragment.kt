@@ -20,6 +20,8 @@ import com.example.spectra_cinemas_android.models.Snack
 import com.example.spectra_cinemas_android.utils.CanteenData
 import com.example.spectra_cinemas_android.utils.MovieData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.Locale
 
 class BookingCanteenFragment : Fragment() {
@@ -34,7 +36,7 @@ class BookingCanteenFragment : Fragment() {
     private var time: String = ""
     private var selectedSeats = listOf<String>()
 
-    private val allProducts = CanteenData.getAllSnacks()
+    private var allProducts: List<Snack> = emptyList()
     private val cart = mutableMapOf<Snack, Int>()
     private lateinit var adapter: BookingCanteenAdapter
     private var currentType = "SNACK"
@@ -78,7 +80,7 @@ class BookingCanteenFragment : Fragment() {
             val snackNames = bundle.getStringArrayList("CART_NAMES") ?: arrayListOf()
             val snackQtys = bundle.getIntegerArrayList("CART_QTYS") ?: arrayListOf()
             for (i in snackNames.indices) {
-                val snack = allProducts.find { it.name == snackNames[i] }
+                val snack = CanteenData.getAllSnacks().find { it.name == snackNames[i] }
                 if (snack != null) {
                     cart[snack] = snackQtys[i]
                 }
@@ -86,10 +88,16 @@ class BookingCanteenFragment : Fragment() {
         }
 
         setupUI()
+        // Χρήση τοπικών δεδομένων για ταχύτητα στην παρουσίαση
+        allProducts = CanteenData.getAllSnacks()
         setupRecyclerView()
-        updateFilter() // Εφαρμογή φίλτρου και χρωμάτων
+        updateFilter()
         setupBottomSheet()
         updateSummary()
+    }
+
+    private fun loadProducts() {
+        // Καταργήθηκε για την παρουσίαση - χρησιμοποιούμε απευθείας τα τοπικά
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -250,6 +258,11 @@ class BookingCanteenFragment : Fragment() {
             finalSnacks
         )
         (activity as? MainActivity)?.replaceFragment(fragment, "Πληρωμή")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setUIForBooking(true)
     }
 
     override fun onDestroyView() {
