@@ -86,11 +86,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="30dp">
-
-            <Button android:id="@+id/btnGoogleWallet" android:layout_width="0dp" android:layout_height="45dp" android:layout_weight="1" android:layout_marginEnd="5dp" android:backgroundTint="#000000" android:text="Google Wallet" android:textColor="#FFFFFF" android:textAllCaps="false" android:textStyle="bold"/>
-            <Button android:id="@+id/btnAppleWallet" android:layout_width="0dp" android:layout_height="45dp" android:layout_weight="1" android:layout_marginStart="5dp" android:backgroundTint="#000000" android:text="Apple Wallet" android:textColor="#FFFFFF" android:textAllCaps="false" android:textStyle="bold"/>
         </LinearLayout>
 
-        <Button android:id="@+id/btnHome" android:layout_width="wrap_content" android:layout_height="45dp" android:backgroundTint="#00000000" android:text="ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΑΡΧΙΚΗ" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="@color/red_primary"
+            android:text="ΕΠΙΣΤΡΟΦΗ ΣΤΗΝ ΑΡΧΙΚΗ"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
+
     </LinearLayout>
 </ScrollView>
