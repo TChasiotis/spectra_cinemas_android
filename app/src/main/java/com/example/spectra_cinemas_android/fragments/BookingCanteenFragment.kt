@@ -138,7 +138,7 @@ class BookingCanteenFragment : Fragment() {
             binding.btnSnacks.setBackgroundResource(R.drawable.f_btn_active_background)
             binding.btnSnacks.backgroundTintList = ColorStateList.valueOf(activeColor)
             binding.btnSnacks.setTextColor(Color.WHITE)
-            
+
             binding.btnDrinks.background = null
             binding.btnDrinks.backgroundTintList = null
             binding.btnDrinks.setTextColor(Color.WHITE)
@@ -146,7 +146,7 @@ class BookingCanteenFragment : Fragment() {
             binding.btnDrinks.setBackgroundResource(R.drawable.f_btn_active_background)
             binding.btnDrinks.backgroundTintList = ColorStateList.valueOf(activeColor)
             binding.btnDrinks.setTextColor(Color.WHITE)
-            
+
             binding.btnSnacks.background = null
             binding.btnSnacks.backgroundTintList = null
             binding.btnSnacks.setTextColor(Color.WHITE)
@@ -236,7 +236,7 @@ class BookingCanteenFragment : Fragment() {
         var total = 0.0
         val ticketPrice = 7.0
         for (seat in selectedSeats) total += ticketPrice
-        
+
         val snacksSb = StringBuilder()
         for ((snack, qty) in cart) {
             if (qty > 0) {

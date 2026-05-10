@@ -20,13 +20,13 @@ class SeatSelectionFragment : Fragment() {
 
     private var _binding: SeatSelectionViewBinding? = null
     private val binding get() = _binding!!
-    
+
     private var movie: Movie? = null
     private var cinema: String = ""
     private var date: String = ""
     private var time: String = ""
-    
-    private var hallType: Int = 2 
+
+    private var hallType: Int = 2
     private var hallName: String = ""
     private val selectedSeats = mutableListOf<String>()
     private val MAX_SEATS = 5
@@ -91,7 +91,7 @@ class SeatSelectionFragment : Fragment() {
         val hash = Math.abs(uniqueKey.hashCode())
         val titleUp = movie?.title?.uppercase() ?: ""
         val isBlockbuster = titleUp.contains("AVATAR") || titleUp.contains("DUNE") || titleUp.contains("BATMAN")
-        
+
         val chance = hash % 100
         if (isBlockbuster) {
             if (chance < 60) setIMAX((hash % 2) + 1) else setStandard((hash % 4) + 3)
@@ -155,7 +155,7 @@ class SeatSelectionFragment : Fragment() {
     private fun createSingleSeat(row: Char, seatNum: Int, gridRow: Int, gridCol: Int, rand: Random) {
         val seatId = "$row$seatNum"
         val seatBtn = ToggleButton(requireContext())
-        val sizeInDp = if (hallType == 1) 22 else 28 
+        val sizeInDp = if (hallType == 1) 24 else 32
         val size = (sizeInDp * resources.displayMetrics.density).toInt()
 
         val params = GridLayout.LayoutParams().apply {
@@ -165,7 +165,7 @@ class SeatSelectionFragment : Fragment() {
             rowSpec = GridLayout.spec(gridRow)
             columnSpec = GridLayout.spec(gridCol)
         }
-        
+
         seatBtn.layoutParams = params
         seatBtn.text = seatNum.toString()
         seatBtn.textOn = seatNum.toString()
@@ -174,10 +174,10 @@ class SeatSelectionFragment : Fragment() {
         seatBtn.minHeight = 0
         seatBtn.minWidth = 0
         seatBtn.gravity = Gravity.CENTER
-        seatBtn.textSize = if (hallType == 1) 6f else 8f
+        seatBtn.textSize = if (hallType == 1) 7f else 10f
         seatBtn.setTextColor(Color.WHITE)
         seatBtn.background = ContextCompat.getDrawable(requireContext(), R.drawable.f_btn_active_background)
-        
+
         if (rand.nextDouble() < 0.20) {
             seatBtn.isEnabled = false
             seatBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E50914"))
@@ -196,8 +196,8 @@ class SeatSelectionFragment : Fragment() {
         label.setTextColor(Color.WHITE)
         label.gravity = Gravity.CENTER
         label.setTypeface(null, Typeface.BOLD)
-        
-        val sizeInDp = if (hallType == 1) 22 else 28
+
+        val sizeInDp = if (hallType == 1) 24 else 32
         val size = (sizeInDp * resources.displayMetrics.density).toInt()
         val params = GridLayout.LayoutParams().apply {
             width = size
@@ -205,7 +205,6 @@ class SeatSelectionFragment : Fragment() {
             rowSpec = GridLayout.spec(row)
             columnSpec = GridLayout.spec(col)
         }
-        binding.seatsGrid.addView(label, params)
     }
 
     private fun handleSeatClick(button: ToggleButton, seatId: String, isSelected: Boolean) {
